@@ -16,6 +16,6 @@ $koneksi = @mysqli_real_connect($conn, $host, $user, $pass, $db, $port, NULL, MY
 if (!$koneksi) {
     die("Koneksi Gagal: " . mysqli_connect_error());
 } else {
-    echo "Hore! Koneksi ke TiDB Cloud Berhasil.";
+    echo "";
 }
 ?>
