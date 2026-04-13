@@ -5,6 +5,11 @@
     }
   },
   "routes": [
+    { "src": "/assets/(.*)", "dest": "/public/assets/$1" },
+    { "src": "/index.php", "dest": "/api/index.php" },
+    { "src": "/virtualtour.php", "dest": "/api/virtualtour.php" },
+    { "src": "/pegawai.php", "dest": "/api/pegawai.php" },
+    { "src": "/tentang.php", "dest": "/api/tentang.php" },
     { "src": "/(.*)", "dest": "/api/index.php" }
   ]
 }
