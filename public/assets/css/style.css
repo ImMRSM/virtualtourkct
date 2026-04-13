@@ -1,0 +1,738 @@
+/* assets/css/style.css - Global Style */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Sticky Footer */
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Hero Section */
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Navbar Styling - ORANYE */
+.navbar {
+    background: #FF5D07 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 0;
+}
+
+.navbar-brand {
+    color: white !important;
+    font-size: 1.1rem;
+}
+
+.navbar-brand i {
+    color: white !important;
+    font-size: 1.3rem;
+    vertical-align: middle;
+}
+
+.nav-link {
+    color: white !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    padding: 0.4rem 0.8rem !important;
+}
+
+.nav-link i {
+    color: white !important;
+    font-size: 1rem;
+    vertical-align: middle;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+.nav-link.active {
+    background-color: white !important;
+    color: #FF5D07 !important;
+    font-weight: 600;
+}
+
+.nav-link.active i {
+    color: #FF5D07 !important;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* Card Styling */
+.card {
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Virtual Tour Components */
+.info-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-left: 4px solid #FF5D07;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 320px;
+}
+
+.info-panel h6 {
+    font-weight: 600;
+    color: #212529;
+}
+
+.info-panel p {
+    color: #6c757d;
+    line-height: 1.6;
+}
+
+.quick-nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    padding: 6px;
+}
+
+.quick-nav .btn {
+    border: none;
+    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: 40px;
+    transition: all 0.2s ease;
+}
+
+.quick-nav .btn:hover {
+    background-color: white !important;
+    color: #FF5D07 !important;
+    border-color: white;
+    box-shadow: 0 5px 15px rgba(255, 93, 7, 0.3);
+}
+/* ACTIVE STATE - saat tombol diklik */
+.quick-nav .btn:active {
+    background-color: white !important;
+    color: #FF5D07 !important;
+    font-weight: 600;
+}
+
+/* ACTIVE CLASS - untuk tombol yang sedang aktif (ruangan yang sedang dibuka) */
+.quick-nav .btn.active {
+    color: #FF5D07 !important;
+}
+
+.mini-map-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 220px;
+}
+
+.mini-map-card .card-header {
+    background: #0d6efd;
+    color: white;
+    border-radius: 16px 16px 0 0 !important;
+    padding: 8px 15px;
+}
+
+.mini-map-container {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e9ecef;
+}
+
+#map-indicator {
+    width: 14px;
+    height: 14px;
+    background: #dc3545;
+    border: 3px solid white;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 10px rgba(220, 53, 69, 0.5);
+    z-index: 10;
+}
+
+/* Loading Animation */
+.pnlm-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #FF5D07;  /* GANTI dari #0d6efd */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    background: transparent !important;
+    z-index: 2000;
+}
+
+.pnlm-loading span {
+    display: none !important;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Footer styling - ORANYE */
+footer {
+    font-family: 'Inter', sans-serif;
+    background: #FF5D07;
+    width: 100%;
+    border-top: none;
+}
+
+footer .text-secondary {
+    color: #ffffff !important;
+}
+
+footer .fw-semibold {
+    font-weight: 500;
+    color: #ffffff;
+}
+
+footer i {
+    font-size: 0.9rem;
+    vertical-align: middle;
+    color: #ffffff;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    footer .row > div {
+        margin-bottom: 0.5rem;
+    }
+    footer .row > div:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* Custom Divider Pemisah Antar Section */
+.custom-divider {
+    position: relative;
+    margin: 50px auto;
+    height: 40px;
+    width: 50%;
+}
+
+.custom-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(255, 93, 7, 0.5), transparent);
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.divider-dots {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    height: 100%;
+    z-index: 2;
+}
+
+/* Titik kiri (kecil) */
+.divider-dots span:first-child {
+    width: 13px;
+    height: 13px;
+    background: rgba(255, 93, 7, 0.4);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px rgba(255, 93, 7, 0.3);
+}
+
+/* Titik tengah (besar) */
+.divider-dots span:nth-child(2) {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 93, 7, 0.8);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 15px rgba(255, 93, 7, 0.6);
+    margin: 0 -10px;
+    z-index: 3;
+}
+
+/* Titik kanan (kecil) */
+.divider-dots span:last-child {
+    width: 13px;
+    height: 13px;
+    background: rgba(255, 93, 7, 0.4);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px rgba(255, 93, 7, 0.3);
+}
+
+/* Efek bertumpuk dengan negative margin */
+.divider-dots {
+    gap: 5px;  /* Gap kecil biar rapat */
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet (max-width: 992px) */
+@media (max-width: 992px) {
+    /* Navbar */
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .navbar-brand i {
+        font-size: 1.2rem;
+    }
+    
+    /* Hero Section */
+    .hero-section h1.display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.2rem;
+    }
+    
+    /* About Page */
+    .container.my-5 .row.align-items-center {
+        gap: 2rem !important;
+    }
+    
+    .col-lg-6 img {
+        height: 300px !important;
+    }
+    
+    /* Layanan Cards */
+    .card-body.p-5 {
+        padding: 2rem !important;
+    }
+}
+
+/* Mobile Landscape (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Navbar */
+    .navbar .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .navbar-nav {
+        margin-top: 10px;
+    }
+    
+    .nav-item {
+        margin: 2px 0 !important;
+        width: 100%;
+    }
+    
+    .nav-link {
+        text-align: center;
+        padding: 10px !important;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        min-height: 80vh;
+    }
+    
+    .hero-section h1.display-3 {
+        font-size: 2rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1rem;
+        margin-top: 1rem !important;
+    }
+    
+    .hero-section .btn-lg {
+        padding: 10px 30px !important;
+        font-size: 1rem;
+    }
+    
+    /* Spacer */
+    div[style*="height: 56px"],
+    div[style*="height: 58px"] {
+        height: 50px !important;
+    }
+    
+    /* About Page */
+    .col-lg-6 img {
+        height: 250px !important;
+    }
+    
+    .row.g-5 {
+        gap: 2rem !important;
+    }
+    
+    /* Layanan Cards */
+    .row.g-4 {
+        gap: 1rem;
+    }
+    
+    .card-body.p-5 {
+        padding: 1.5rem !important;
+    }
+    
+    /* Kontak Section */
+    .col-lg-5 .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .col-lg-5 .d-flex .me-3 {
+        margin-bottom: 10px;
+        margin-right: 0 !important;
+    }
+    
+    /* Social Media Buttons */
+    .d-flex.gap-3 {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    /* Footer */
+    footer .row {
+        text-align: center !important;
+    }
+    
+    footer .col-md-6 {
+        margin-bottom: 10px;
+    }
+    
+    footer .text-md-end {
+        text-align: center !important;
+    }
+}
+
+/* Mobile Portrait (max-width: 576px) */
+@media (max-width: 576px) {
+    /* Hero Section */
+    .hero-section h1.display-3 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 0.9rem;
+    }
+    
+    .hero-section .btn-lg {
+        padding: 8px 20px !important;
+        font-size: 0.9rem;
+    }
+    
+    /* About Page */
+    .col-lg-6 h2 {
+        font-size: 1.5rem;
+    }
+    
+    .col-lg-6 p {
+        font-size: 0.9rem;
+    }
+    
+    .col-lg-6 img {
+        height: 200px !important;
+    }
+    
+    .col-md-6 h6 {
+        font-size: 0.9rem;
+    }
+    
+    .col-md-6 p.small {
+        font-size: 0.8rem;
+    }
+    
+    /* Layanan Cards */
+    .card-body.p-5 {
+        padding: 1rem !important;
+    }
+    
+    .card-body i.fs-1 {
+        font-size: 2rem !important;
+    }
+    
+    .card-body h5 {
+        font-size: 1rem;
+    }
+    
+    .card-body p.small {
+        font-size: 0.75rem;
+    }
+    
+    /* Custom Divider */
+    .custom-divider {
+        width: 70%;
+    }
+    
+    .divider-dots span:first-child,
+    .divider-dots span:last-child {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .divider-dots span:nth-child(2) {
+        width: 15px;
+        height: 15px;
+    }
+    
+    /* Kontak Section */
+    .col-lg-5 h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    
+    .d-flex.mb-4 {
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .d-flex.mb-4 i.fs-4 {
+        font-size: 1.2rem !important;
+    }
+    
+    .d-flex.mb-4 h6 {
+        font-size: 0.9rem;
+    }
+    
+    /* Google Maps */
+    .col-lg-7 .rounded-4 {
+        padding: 1rem !important;
+    }
+    
+    .col-lg-7 iframe {
+        height: 250px;
+    }
+    
+    /* Social Media Buttons */
+    .btn-outline-secondary.rounded-circle {
+        width: 40px !important;
+        height: 40px !important;
+        padding: 0.5rem !important;
+    }
+    
+    .btn-outline-secondary i {
+        font-size: 1rem !important;
+    }
+}
+
+/* Hover effect untuk tombol panah */
+.scroll-btn:hover {
+    background: white !important;
+    color: #FF5D07 !important;
+    transform: translateY(-50%) scale(1.1);
+    border-color: #FF5D07 !important;
+}
+
+/* Hover effect untuk tombol ruangan */
+#floor1-nav .btn:hover, #floor2-nav .btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px);
+}
+
+/* Active state untuk tombol ruangan */
+#floor1-nav .btn.active-nav, #floor2-nav .btn.active-nav {
+    background: white !important;
+    color: #FF5D07 !important;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsif */
+@media (max-width: 576px) {
+    #floor1-nav .btn, #floor2-nav .btn {
+        min-width: 70px !important;
+        font-size: 0.7rem !important;
+        padding: 4px 6px !important;
+    }
+    
+    .scroll-btn {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 20px !important;
+    }
+    
+    .scroll-wrapper {
+        max-width: 350px !important;
+    }
+}
+
+/* Pastikan Lantai 2 memiliki style yang sama dengan Lantai 1 */
+#floor2-nav .btn {
+    min-width: 85px;
+    font-size: 0.85rem;
+    color: white;
+    background: transparent;
+    border: none;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+#floor2-nav .btn i {
+    font-size: 0.9rem;
+    margin-right: 4px;
+}
+
+/* Hover effect untuk Lantai 2 */
+#floor2-nav .btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px);
+}
+
+/* Active state untuk Lantai 2 */
+#floor2-nav .btn.active-nav {
+    background: white !important;
+    color: #FF5D07 !important;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsif Lantai 2 */
+@media (max-width: 768px) {
+    #floor2-nav .btn {
+        min-width: 75px !important;
+        font-size: 0.75rem !important;
+        padding: 6px 8px !important;
+    }
+    
+    #floor2-nav .btn i {
+        font-size: 0.8rem !important;
+        margin-right: 3px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #floor2-nav .btn {
+        min-width: 70px !important;
+        font-size: 0.7rem !important;
+        padding: 5px 6px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    #floor2-nav .btn {
+        min-width: 60px !important;
+        font-size: 0.65rem !important;
+        padding: 4px 4px !important;
+    }
+    
+    #floor2-nav .btn i {
+        display: none !important;
+    }
+}
+
+/* Style untuk Lantai 3 */
+#floor3-nav .btn {
+    min-width: 85px;
+    font-size: 0.85rem;
+    color: white;
+    background: transparent;
+    border: none;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+#floor3-nav .btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px);
+}
+
+#floor3-nav .btn.active-nav {
+    background: white !important;
+    color: #FF5D07 !important;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsif Lantai 3 */
+@media (max-width: 768px) {
+    #floor3-nav .btn {
+        min-width: 75px !important;
+        font-size: 0.75rem !important;
+        padding: 6px 8px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #floor3-nav .btn {
+        min-width: 70px !important;
+        font-size: 0.7rem !important;
+        padding: 5px 6px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    #floor3-nav .btn {
+        min-width: 60px !important;
+        font-size: 0.65rem !important;
+        padding: 4px 4px !important;
+    }
+    
+    #floor3-nav .btn i {
+        display: none !important;
+    }
+}

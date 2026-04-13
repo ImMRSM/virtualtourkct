@@ -1,0 +1,324 @@
+/* CSS khusus untuk halaman virtual tour */
+
+/* Reset dan layout dasar */
+html,
+body {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container-fluid.p-0 {
+    height: 100vh !important;
+    width: 100vw !important;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Content wrapper */
+.content-wrapper {
+    position: relative;
+    height: calc(100vh - 56px);
+    margin-top: 56px;
+    overflow: hidden;
+}
+
+/* Panorama Container */
+#panorama-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Panel informasi */
+.info-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1040;
+    max-width: 320px;
+}
+
+/* Mini map */
+.mini-map {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1040;
+}
+
+/* Navigasi cepat */
+.quick-nav {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1040;
+}
+/* Active state untuk navigasi cepat */
+.quick-nav .btn.active-nav {
+    background: white !important;
+    color: #FF5D07 !important;
+    border-color: white !important;
+    font-weight: 600;
+}
+
+/* Hover effect tetap ada */
+.quick-nav .btn:hover {
+    background: white !important;
+    color: #FF5D07 !important;
+    border-color: white !important;
+}
+
+/* Loading animation (pindahkan dari style.css jika perlu) */
+.pnlm-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #FF5D07;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    background: transparent !important;
+    z-index: 2000;
+}
+
+.pnlm-loading span {
+    display: none !important;
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Transisi */
+#ruangan-nama,
+#ruangan-deskripsi {
+    transition: all 0.2s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .info-panel {
+        max-width: 250px;
+    }
+
+    .quick-nav {
+        top: 10px;
+    }
+
+    .quick-nav .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    .mini-map {
+        display: none;
+    }
+
+    .zoom-controls {
+        left: 10px;
+    }
+
+    .zoom-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}
+
+/* Untuk laptop dengan layar lebar */
+@media (min-width: 1200px) {
+    .info-panel {
+        max-width: 350px;
+    }
+
+    .info-panel .card-body {
+        padding: 1.25rem;
+    }
+}
+
+/* Navigasi lantai */
+.quick-nav .btn-group {
+    background: #FF5D07;
+    border-radius: 50px;
+    padding: 3px;
+    margin-bottom: 10px;
+}
+
+.quick-nav .btn-group .btn {
+    border: none;
+    font-size: 0.85rem;
+    padding: 5px 20px;
+    border-radius: 50px !important;
+    transition: all 0.2s ease;
+}
+
+.quick-nav .btn-group .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Transisi untuk pergantian lantai */
+#floor1-nav, #floor2-nav {
+    transition: opacity 0.3s ease;
+}
+
+/* Active state untuk tombol ruangan */
+.quick-nav .btn.active-nav {
+    background: white !important;
+    color: #FF5D07 !important;
+    font-weight: 600;
+}
+
+/* Responsive untuk layar kecil */
+@media (max-width: 576px) {
+    .quick-nav .btn {
+        font-size: 0.75rem !important;
+        padding: 4px 10px !important;
+    }
+    
+    .quick-nav .btn-group .btn {
+        padding: 4px 15px !important;
+    }
+}
+
+/* Responsive untuk Virtual Tour */
+@media (max-width: 992px) {
+    .info-panel {
+        max-width: 280px;
+    }
+    
+    .info-panel .card-body {
+        padding: 0.8rem !important;
+    }
+    
+    .info-panel h6 {
+        font-size: 0.9rem !important;
+    }
+    
+    .info-panel p {
+        font-size: 0.75rem !important;
+    }
+    
+    .quick-nav .btn {
+        font-size: 0.8rem !important;
+        padding: 6px 12px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        margin-top: 50px;
+        height: calc(100vh - 50px);
+    }
+    
+    .info-panel {
+        max-width: 240px;
+        bottom: 10px;
+        left: 10px;
+    }
+    
+    .quick-nav {
+        top: 10px;
+    }
+    
+    .quick-nav .btn {
+        font-size: 0.7rem !important;
+        padding: 4px 8px !important;
+    }
+    
+    .floor-toggle {
+        margin: 10px !important;
+    }
+    
+    .floor-toggle .btn {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    #floor1-nav .btn,
+    #floor2-nav .btn {
+        padding: 4px 8px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .quick-nav {
+        z-index: 9999 !important;
+        pointer-events: auto !important;
+    }
+    .quick-nav .btn {
+        pointer-events: auto !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .scroll-wrapper {
+        padding: 5px 25px;
+    }
+    .scroll-btn {
+        width: 25px;
+        height: 25px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Tambahkan di bagian bawah virtualtour.css */
+
+/* Styling untuk scroll container */
+.scroll-wrapper {
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    width: 100%;
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* Tombol panah */
+.scroll-btn {
+    z-index: 20;
+    background: #FF5D07;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    font-size: 24px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.scroll-btn:hover {
+    background: white;
+    color: #FF5D07;
+    transform: scale(1.1);
+    border-color: #FF5D07;
+}
+
