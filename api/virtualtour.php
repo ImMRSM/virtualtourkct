@@ -39,15 +39,35 @@ foreach ($lokasi as $id => $l) {
             ];
         }
     }
+    
+    // --- Tentukan default yaw agar hotspot penting terlihat ---
+    $default_yaw = 0;
+    // Atur khusus untuk Ruang Tamu (id=11) agar langsung melihat Mushola (yaw 320)
+    if ($id == 11) {
+        $default_yaw = 320;
+    }
+    // Bisa tambahkan aturan lain misal untuk scene dengan satu hotspot dominan
+    else if (isset($hotspots[$id]) && count($hotspots[$id]) == 1) {
+        // Arahkan ke satu-satunya hotspot
+        $default_yaw = $hotspots[$id][0]['yaw'];
+    }
+    // Atau arahkan ke rata-rata yaw hotspot (opsional)
+    
     $scenes['scene_' . $id] = [
         'hfov' => 100,
         'pitch' => 0,
-        'yaw' => 0,
+        'yaw' => $default_yaw,    // <-- yaw dinamis
         'type' => 'equirectangular',
         'panorama' => $l['gambar_panorama'],
         'hotSpots' => $scene_hotspots
     ];
 }
+
+// Pastikan deskripsi tidak mengandung karakter bermasalah
+foreach ($lokasi as &$l) {
+    $l['deskripsi'] = htmlspecialchars($l['deskripsi'], ENT_QUOTES, 'UTF-8');
+}
+unset($l);
 
 // Data untuk mini map
 $map_data = [];
@@ -384,12 +404,12 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         const minZoom = 50;
         const maxZoom = 120;
 
-   const viewer = pannellum.viewer('panorama-container', {
-    "autoLoad": true,
-    "autoRotate": -1,
-    "crossOrigin": "anonymous", // Tambahkan baris ini
-    "default": {
-        "firstScene": "scene_<?= $default_scene ?>",
+        const viewer = pannellum.viewer('panorama-container', {
+            "autoLoad": true,
+            "autoRotate": -1,
+            "crossOrigin": "anonymous", // Tambahkan baris ini
+            "default": {
+                "firstScene": "scene_<?= $default_scene ?>",
                 "sceneFadeDuration": 300,
                 "hfov": currentHfov
             },
@@ -468,7 +488,6 @@ if ($default_scene >= 10 && $default_scene <= 19) {
             rightBtn.style.display = canScrollRight ? 'flex' : 'none';
         }
 
-
         // Init carousel
         function initCarousel(containerId) {
             const navElement = document.getElementById(containerId);
@@ -526,48 +545,38 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         }
 
         // Fungsi untuk set active nav
-    function setActiveNav(button, sceneId) {
-    if (!button) return;
+        function setActiveNav(button, sceneId) {
+            if (!button) return;
 
-    let floor = 1;
-    if (sceneId >= 10 && sceneId <= 19) floor = 2;
-    else if (sceneId >= 20) floor = 3;
+            let floor = 1;
+            if (sceneId >= 10 && sceneId <= 19) floor = 2;
+            else if (sceneId >= 20) floor = 3;
 
-    const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
+            const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
 
-    // Reset semua tombol di navigasi lantai aktif
-    const allNavButtons = document.querySelectorAll(`#${currentFloorNav} .btn`);
-    allNavButtons.forEach(btn => {
-        btn.classList.remove('active-nav');
-        btn.style.background = 'transparent';
-        btn.style.color = 'white';
-    });
+            // Reset semua tombol di navigasi lantai aktif
+            const allNavButtons = document.querySelectorAll(`#${currentFloorNav} .btn`);
+            allNavButtons.forEach(btn => {
+                btn.classList.remove('active-nav');
+                btn.style.background = 'transparent';
+                btn.style.color = 'white';
+            });
 
-    // Aktifkan tombol yang diklik
-    button.classList.add('active-nav');
-    button.style.background = 'white';
-    button.style.color = '#FF5D07';
+            // Aktifkan tombol yang diklik
+            button.classList.add('active-nav');
+            button.style.background = 'white';
+            button.style.color = '#FF5D07';
 
-    // Update Nama & Deskripsi Ruangan dari data database
-    const data = lokasiData[sceneId];
-    if (data) {
-        document.getElementById('ruangan-nama').innerText = data.nama_lokasi;
-        document.getElementById('ruangan-deskripsi').innerText = data.deskripsi;
-    }
+            // Update Nama & Deskripsi Ruangan dari data database
+            const data = lokasiData[sceneId];
+            if (data) {
+                document.getElementById('ruangan-nama').innerText = data.nama_lokasi;
+                document.getElementById('ruangan-deskripsi').innerText = data.deskripsi;
+            }
 
-    // Pindah Foto 360
-    viewer.loadScene('scene_' + sceneId);
-}
-
-
-// Tambahan: Update Nama & Deskripsi di panel kiri bawah
-const data = lokasiData[sceneId];
-if (data) {
-    document.getElementById('ruangan-nama').innerText = data.nama_lokasi;
-    document.getElementById('ruangan-deskripsi').innerText = data.deskripsi;
-}
-
-        
+            // Pindah Foto 360
+            viewer.loadScene('scene_' + sceneId);
+        }
 
         // Event scenechange
         viewer.on('scenechange', function (sceneId) {
@@ -649,8 +658,15 @@ if (data) {
                 descEl.style.opacity = '0';
 
                 setTimeout(() => {
-                    namaEl.innerText = lokasiData[id]?.nama_lokasi || 'Ruangan';
-                    descEl.innerText = lokasiData[id]?.deskripsi || 'Deskripsi tidak tersedia';
+                    const data = lokasiData[id];
+                    if (data) {
+                        namaEl.innerText = data.nama_lokasi;
+                        descEl.innerText = data.deskripsi;
+                    } else {
+                        console.warn('Lokasi tidak ditemukan untuk id:', id);
+                        namaEl.innerText = 'Ruangan';
+                        descEl.innerText = 'Deskripsi tidak tersedia';
+                    }
                     namaEl.style.opacity = '1';
                     descEl.style.opacity = '1';
                 }, 200);
