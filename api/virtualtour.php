@@ -113,7 +113,6 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         margin: 0 !important;
         padding: 0 !important;
         background-color: #000;
-        /* Hitam di belakang panorama */
     }
 
     .content-wrapper {
@@ -127,34 +126,25 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         padding: 0 !important;
         width: 100% !important;
         height: calc(100vh - 56px) !important;
-        /* Tinggi penuh dikurangi navbar */
     }
 
     /* Responsif untuk handphone */
     @media (max-width: 768px) {
-
-        /* Container navigasi */
         .quick-nav .floor-toggle-container {
             max-width: 280px !important;
             width: auto !important;
             min-width: 240px;
             padding: 3px !important;
         }
-
-        /* Tombol navigasi */
         .quick-nav .btn {
             min-width: 48px !important;
             padding: 3px 5px !important;
             font-size: 0.65rem !important;
         }
-
-        /* Area scroll */
         .quick-nav .scroll-wrapper {
             max-width: 235px !important;
             padding: 0 18px !important;
         }
-
-        /* Tombol panah */
         .quick-nav .scroll-btn {
             width: 26px !important;
             height: 26px !important;
@@ -162,45 +152,38 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         }
     }
 
-    /* Untuk handphone yang lebih kecil */
     @media (max-width: 480px) {
         .quick-nav .floor-toggle-container {
             max-width: 260px !important;
             min-width: 220px;
         }
-
         .quick-nav .btn {
             min-width: 44px !important;
             padding: 3px 4px !important;
             font-size: 0.62rem !important;
         }
-
         .quick-nav .scroll-wrapper {
             max-width: 215px !important;
             padding: 0 16px !important;
         }
     }
-    /* Agar panel info bisa di-scroll di HP tanpa mengganggu panorama */
-@media (max-width: 768px) {
-    .info-panel {
-        max-height: 30vh;          /* batasi tinggi maksimal */
-        overflow-y: auto;          /* scroll vertikal */
-        touch-action: pan-y;       /* hanya scroll vertikal, tidak horizontal */
-        -webkit-overflow-scrolling: touch;
-        pointer-events: auto;      /* biar bisa disentuh */
+
+    /* PERBAIKAN UTAMA: Panel info bisa di-scroll di HP tanpa mengganggu panorama */
+    @media (max-width: 768px) {
+        .info-panel {
+            max-height: 35vh !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            touch-action: pan-y !important;
+            pointer-events: auto !important;
+            z-index: 2000 !important;
+            position: relative;
+        }
+        .info-panel .card-body {
+            overflow-y: visible !important;
+            max-height: none !important;
+        }
     }
-    
-    .info-panel .card-body {
-        overflow-y: auto;
-        max-height: 25vh;
-    }
-    
-    /* Mencegah event touch dari panel mengenai viewer */
-    .info-panel,
-    .info-panel * {
-        touch-action: pan-y;       /* seluruh elemen dalam panel hanya scroll vertikal */
-    }
-}
 </style>
 
 <div class="content-wrapper" style="margin-top: 56px;">
@@ -416,50 +399,174 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         </div>
     </div>
 
-    <script>
-        const lokasiData = <?= json_encode($lokasi) ?>;
-        const defaultScene = <?= $default_scene ?>;
+   <script>
+    const lokasiData = <?= json_encode($lokasi) ?>;
+    const defaultScene = <?= $default_scene ?>;
 
-        // Variabel untuk menyimpan nilai zoom saat ini
-        let currentHfov = 100;
-        const minZoom = 50;
-        const maxZoom = 120;
+    let currentHfov = 100;
+    const minZoom = 50;
+    const maxZoom = 120;
 
-        const viewer = pannellum.viewer('panorama-container', {
-            "autoLoad": true,
-            "autoRotate": -1,
-            "crossOrigin": "anonymous", // Tambahkan baris ini
-            "default": {
-                "firstScene": "scene_<?= $default_scene ?>",
-                "sceneFadeDuration": 300,
-                "hfov": currentHfov
-            },
-            "scenes": <?= json_encode($scenes) ?>
-        });
+    const viewer = pannellum.viewer('panorama-container', {
+        "autoLoad": true,
+        "autoRotate": -1,
+        "crossOrigin": "anonymous",
+        "default": {
+            "firstScene": "scene_<?= $default_scene ?>",
+            "sceneFadeDuration": 300,
+            "hfov": currentHfov
+        },
+        "scenes": <?= json_encode($scenes) ?>
+    });
 
-      if ('ontouchstart' in window) {
-    const infoPanel = document.querySelector('.info-panel');
-    if (infoPanel) {
-        infoPanel.addEventListener('touchstart', function(e) {
-            e.stopPropagation();
-        });
-        infoPanel.addEventListener('touchmove', function(e) {
-            e.stopPropagation();
-            // Jangan e.preventDefault() agar scroll tetap berjalan
-        }, { passive: false });
+    // ========== PERBAIKAN UNTUK SCROLL PANEL DI HP ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        if ('ontouchstart' in window) {
+            const infoPanel = document.querySelector('.info-panel');
+            if (infoPanel) {
+                infoPanel.addEventListener('touchstart', function(e) {
+                    e.stopPropagation();
+                });
+                infoPanel.addEventListener('touchmove', function(e) {
+                    e.stopPropagation();
+                    // Tidak mencegah default agar scroll tetap berjalan di dalam panel
+                }, { passive: false });
+            }
+        }
+    });
+
+    // ========== FUNGSI NAVIGASI DLL (TIDAK BERUBAH) ==========
+    function switchFloor(floor) {
+        const floor1Nav = document.getElementById('floor1-nav');
+        const floor2Nav = document.getElementById('floor2-nav');
+        const floor3Nav = document.getElementById('floor3-nav');
+        const floorButtons = document.querySelectorAll('.floor-toggle .btn');
+
+        if (!floor1Nav || !floor2Nav || !floor3Nav) return;
+
+        if (floor === 1) {
+            floor1Nav.style.display = 'block';
+            floor2Nav.style.display = 'none';
+            floor3Nav.style.display = 'none';
+            if (floorButtons.length >= 3) {
+                floorButtons[0].style.background = 'white';
+                floorButtons[0].style.color = '#FF5D07';
+                floorButtons[1].style.background = 'transparent';
+                floorButtons[1].style.color = 'white';
+                floorButtons[2].style.background = 'transparent';
+                floorButtons[2].style.color = 'white';
+            }
+            if (viewer) viewer.loadScene('scene_1');
+            setTimeout(() => updateCarouselButtons('floor1-nav'), 200);
+        } else if (floor === 2) {
+            floor1Nav.style.display = 'none';
+            floor2Nav.style.display = 'block';
+            floor3Nav.style.display = 'none';
+            if (floorButtons.length >= 3) {
+                floorButtons[0].style.background = 'transparent';
+                floorButtons[0].style.color = 'white';
+                floorButtons[1].style.background = 'white';
+                floorButtons[1].style.color = '#FF5D07';
+                floorButtons[2].style.background = 'transparent';
+                floorButtons[2].style.color = 'white';
+            }
+            if (viewer) viewer.loadScene('scene_10');
+            setTimeout(() => updateCarouselButtons('floor2-nav'), 200);
+        } else {
+            floor1Nav.style.display = 'none';
+            floor2Nav.style.display = 'none';
+            floor3Nav.style.display = 'block';
+            if (floorButtons.length >= 3) {
+                floorButtons[0].style.background = 'transparent';
+                floorButtons[0].style.color = 'white';
+                floorButtons[1].style.background = 'transparent';
+                floorButtons[1].style.color = 'white';
+                floorButtons[2].style.background = 'white';
+                floorButtons[2].style.color = '#FF5D07';
+            }
+            if (viewer) viewer.loadScene('scene_20');
+            setTimeout(() => updateCarouselButtons('floor3-nav'), 200);
+        }
     }
-}
 
+    function updateCarouselButtons(containerId) {
+        const navElement = document.getElementById(containerId);
+        if (!navElement || navElement.style.display === 'none') return;
+        const container = navElement.querySelector('.scroll-wrapper');
+        const leftBtn = navElement.querySelector('.scroll-left');
+        const rightBtn = navElement.querySelector('.scroll-right');
+        if (!container || !leftBtn || !rightBtn) return;
+        const canScrollLeft = container.scrollLeft > 5;
+        const canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth - 5);
+        leftBtn.style.display = canScrollLeft ? 'flex' : 'none';
+        rightBtn.style.display = canScrollRight ? 'flex' : 'none';
+    }
 
-        // Fungsi untuk switch antar lantai
-        function switchFloor(floor) {
-            const floor1Nav = document.getElementById('floor1-nav');
-            const floor2Nav = document.getElementById('floor2-nav');
-            const floor3Nav = document.getElementById('floor3-nav');
-            const floorButtons = document.querySelectorAll('.floor-toggle .btn');
+    function initCarousel(containerId) {
+        const navElement = document.getElementById(containerId);
+        if (!navElement) return;
+        const container = navElement.querySelector('.scroll-wrapper');
+        let leftBtn = navElement.querySelector('.scroll-left');
+        let rightBtn = navElement.querySelector('.scroll-right');
+        if (!container || !leftBtn || !rightBtn) return;
+        const newLeftBtn = leftBtn.cloneNode(true);
+        const newRightBtn = rightBtn.cloneNode(true);
+        leftBtn.parentNode.replaceChild(newLeftBtn, leftBtn);
+        rightBtn.parentNode.replaceChild(newRightBtn, rightBtn);
+        leftBtn = navElement.querySelector('.scroll-left');
+        rightBtn = navElement.querySelector('.scroll-right');
+        leftBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            container.scrollBy({ left: -container.clientWidth, behavior: 'smooth' });
+            setTimeout(() => updateCarouselButtons(containerId), 100);
+        });
+        rightBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
+            setTimeout(() => updateCarouselButtons(containerId), 100);
+        });
+        container.addEventListener('scroll', () => {
+            requestAnimationFrame(() => updateCarouselButtons(containerId));
+        });
+        window.addEventListener('resize', () => {
+            updateCarouselButtons(containerId);
+        });
+        setTimeout(() => updateCarouselButtons(containerId), 200);
+    }
 
-            if (!floor1Nav || !floor2Nav || !floor3Nav) return;
+    function setActiveNav(button, sceneId) {
+        if (!button) return;
+        let floor = 1;
+        if (sceneId >= 10 && sceneId <= 19) floor = 2;
+        else if (sceneId >= 20) floor = 3;
+        const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
+        const allNavButtons = document.querySelectorAll(`#${currentFloorNav} .btn`);
+        allNavButtons.forEach(btn => {
+            btn.classList.remove('active-nav');
+            btn.style.background = 'transparent';
+            btn.style.color = 'white';
+        });
+        button.classList.add('active-nav');
+        button.style.background = 'white';
+        button.style.color = '#FF5D07';
+        const data = lokasiData[sceneId];
+        if (data) {
+            document.getElementById('ruangan-nama').innerText = data.nama_lokasi;
+            document.getElementById('ruangan-deskripsi').innerText = data.deskripsi;
+        }
+        viewer.loadScene('scene_' + sceneId);
+    }
 
+    viewer.on('scenechange', function (sceneId) {
+        const id = sceneId.replace('scene_', '');
+        let floor = 1;
+        if (id >= 10 && id <= 19) floor = 2;
+        else if (id >= 20) floor = 3;
+        const floor1Nav = document.getElementById('floor1-nav');
+        const floor2Nav = document.getElementById('floor2-nav');
+        const floor3Nav = document.getElementById('floor3-nav');
+        const floorButtons = document.querySelectorAll('.floor-toggle .btn');
+        if (floor1Nav && floor2Nav && floor3Nav) {
             if (floor === 1) {
                 floor1Nav.style.display = 'block';
                 floor2Nav.style.display = 'none';
@@ -472,8 +579,6 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                     floorButtons[2].style.background = 'transparent';
                     floorButtons[2].style.color = 'white';
                 }
-                if (viewer) viewer.loadScene('scene_1');
-                setTimeout(() => updateCarouselButtons('floor1-nav'), 200);
             } else if (floor === 2) {
                 floor1Nav.style.display = 'none';
                 floor2Nav.style.display = 'block';
@@ -486,8 +591,6 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                     floorButtons[2].style.background = 'transparent';
                     floorButtons[2].style.color = 'white';
                 }
-                if (viewer) viewer.loadScene('scene_10');
-                setTimeout(() => updateCarouselButtons('floor2-nav'), 200);
             } else {
                 floor1Nav.style.display = 'none';
                 floor2Nav.style.display = 'none';
@@ -500,131 +603,60 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                     floorButtons[2].style.background = 'white';
                     floorButtons[2].style.color = '#FF5D07';
                 }
-                if (viewer) viewer.loadScene('scene_20');
-                setTimeout(() => updateCarouselButtons('floor3-nav'), 200);
             }
         }
-
-        // Fungsi update tombol
-        function updateCarouselButtons(containerId) {
-            const navElement = document.getElementById(containerId);
-            if (!navElement || navElement.style.display === 'none') return;
-
-            const container = navElement.querySelector('.scroll-wrapper');
-            const leftBtn = navElement.querySelector('.scroll-left');
-            const rightBtn = navElement.querySelector('.scroll-right');
-
-            if (!container || !leftBtn || !rightBtn) return;
-
-            const canScrollLeft = container.scrollLeft > 5;
-            const canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth - 5);
-
-            leftBtn.style.display = canScrollLeft ? 'flex' : 'none';
-            rightBtn.style.display = canScrollRight ? 'flex' : 'none';
-        }
-
-        // Init carousel
-        function initCarousel(containerId) {
-            const navElement = document.getElementById(containerId);
-            if (!navElement) return;
-
-            const container = navElement.querySelector('.scroll-wrapper');
-            let leftBtn = navElement.querySelector('.scroll-left');
-            let rightBtn = navElement.querySelector('.scroll-right');
-
-            if (!container || !leftBtn || !rightBtn) return;
-
-            // Hapus event lama (biar tidak double)
-            const newLeftBtn = leftBtn.cloneNode(true);
-            const newRightBtn = rightBtn.cloneNode(true);
-            leftBtn.parentNode.replaceChild(newLeftBtn, leftBtn);
-            rightBtn.parentNode.replaceChild(newRightBtn, rightBtn);
-
-            leftBtn = navElement.querySelector('.scroll-left');
-            rightBtn = navElement.querySelector('.scroll-right');
-
-            // Klik kiri
-            leftBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                container.scrollBy({
-                    left: -container.clientWidth,
-                    behavior: 'smooth'
-                });
-
-                setTimeout(() => updateCarouselButtons(containerId), 100);
-            });
-
-            // Klik kanan
-            rightBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                container.scrollBy({
-                    left: container.clientWidth,
-                    behavior: 'smooth'
-                });
-
-                setTimeout(() => updateCarouselButtons(containerId), 100);
-            });
-
-            // Saat di-scroll manual
-            container.addEventListener('scroll', () => {
-                requestAnimationFrame(() => updateCarouselButtons(containerId));
-            });
-
-            // Saat resize
-            window.addEventListener('resize', () => {
-                updateCarouselButtons(containerId);
-            });
-
-            // update saat pertama load
-            setTimeout(() => updateCarouselButtons(containerId), 200);
-        }
-
-        // Fungsi untuk set active nav
-        function setActiveNav(button, sceneId) {
-            if (!button) return;
-
-            let floor = 1;
-            if (sceneId >= 10 && sceneId <= 19) floor = 2;
-            else if (sceneId >= 20) floor = 3;
-
-            const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
-
-            // Reset semua tombol di navigasi lantai aktif
-            const allNavButtons = document.querySelectorAll(`#${currentFloorNav} .btn`);
-            allNavButtons.forEach(btn => {
+        const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
+        const buttons = document.querySelectorAll(`#${currentFloorNav} .btn`);
+        buttons.forEach((btn, index) => {
+            let expectedId = index + 1;
+            if (floor === 2) expectedId = index + 10;
+            if (floor === 3) expectedId = index + 20;
+            if (expectedId == id) {
+                btn.classList.add('active-nav');
+                btn.style.background = 'white';
+                btn.style.color = '#FF5D07';
+            } else {
                 btn.classList.remove('active-nav');
                 btn.style.background = 'transparent';
                 btn.style.color = 'white';
-            });
-
-            // Aktifkan tombol yang diklik
-            button.classList.add('active-nav');
-            button.style.background = 'white';
-            button.style.color = '#FF5D07';
-
-            // Update Nama & Deskripsi Ruangan dari data database
-            const data = lokasiData[sceneId];
-            if (data) {
-                document.getElementById('ruangan-nama').innerText = data.nama_lokasi;
-                document.getElementById('ruangan-deskripsi').innerText = data.deskripsi;
             }
-
-            // Pindah Foto 360
-            viewer.loadScene('scene_' + sceneId);
+        });
+        const namaEl = document.getElementById('ruangan-nama');
+        const descEl = document.getElementById('ruangan-deskripsi');
+        if (namaEl && descEl && lokasiData) {
+            namaEl.style.opacity = '0';
+            descEl.style.opacity = '0';
+            setTimeout(() => {
+                const data = lokasiData[id];
+                if (data) {
+                    namaEl.innerText = data.nama_lokasi;
+                    descEl.innerText = data.deskripsi;
+                } else {
+                    console.warn('Lokasi tidak ditemukan untuk id:', id);
+                    namaEl.innerText = 'Ruangan';
+                    descEl.innerText = 'Deskripsi tidak tersedia';
+                }
+                namaEl.style.opacity = '1';
+                descEl.style.opacity = '1';
+            }, 200);
         }
+    });
 
-        // Event scenechange
-        viewer.on('scenechange', function (sceneId) {
-            const id = sceneId.replace('scene_', '');
+    window.addEventListener('resize', function () {
+        const container = document.getElementById('panorama-container');
+        if (container) container.style.height = window.innerHeight + 'px';
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(() => {
+            const defaultId = defaultScene;
             let floor = 1;
-            if (id >= 10 && id <= 19) floor = 2;
-            else if (id >= 20) floor = 3;
-
+            if (defaultId >= 10 && defaultId <= 19) floor = 2;
+            else if (defaultId >= 20) floor = 3;
             const floor1Nav = document.getElementById('floor1-nav');
             const floor2Nav = document.getElementById('floor2-nav');
             const floor3Nav = document.getElementById('floor3-nav');
             const floorButtons = document.querySelectorAll('.floor-toggle .btn');
-
             if (floor1Nav && floor2Nav && floor3Nav) {
                 if (floor === 1) {
                     floor1Nav.style.display = 'block';
@@ -664,129 +696,23 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                     }
                 }
             }
-
             const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
             const buttons = document.querySelectorAll(`#${currentFloorNav} .btn`);
-
             buttons.forEach((btn, index) => {
                 let expectedId = index + 1;
                 if (floor === 2) expectedId = index + 10;
                 if (floor === 3) expectedId = index + 20;
-
-                if (expectedId == id) {
+                if (expectedId == defaultId) {
                     btn.classList.add('active-nav');
                     btn.style.background = 'white';
                     btn.style.color = '#FF5D07';
-                } else {
-                    btn.classList.remove('active-nav');
-                    btn.style.background = 'transparent';
-                    btn.style.color = 'white';
                 }
             });
-
-            // Update informasi ruangan
-            const namaEl = document.getElementById('ruangan-nama');
-            const descEl = document.getElementById('ruangan-deskripsi');
-
-            if (namaEl && descEl && lokasiData) {
-                namaEl.style.opacity = '0';
-                descEl.style.opacity = '0';
-
-                setTimeout(() => {
-                    const data = lokasiData[id];
-                    if (data) {
-                        namaEl.innerText = data.nama_lokasi;
-                        descEl.innerText = data.deskripsi;
-                    } else {
-                        console.warn('Lokasi tidak ditemukan untuk id:', id);
-                        namaEl.innerText = 'Ruangan';
-                        descEl.innerText = 'Deskripsi tidak tersedia';
-                    }
-                    namaEl.style.opacity = '1';
-                    descEl.style.opacity = '1';
-                }, 200);
-            }
-        });
-
-        window.addEventListener('resize', function () {
-            const container = document.getElementById('panorama-container');
-            if (container) container.style.height = window.innerHeight + 'px';
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Set display lantai dan active button
-            setTimeout(() => {
-                const defaultId = defaultScene;
-                let floor = 1;
-                if (defaultId >= 10 && defaultId <= 19) floor = 2;
-                else if (defaultId >= 20) floor = 3;
-
-                const floor1Nav = document.getElementById('floor1-nav');
-                const floor2Nav = document.getElementById('floor2-nav');
-                const floor3Nav = document.getElementById('floor3-nav');
-                const floorButtons = document.querySelectorAll('.floor-toggle .btn');
-
-                if (floor1Nav && floor2Nav && floor3Nav) {
-                    if (floor === 1) {
-                        floor1Nav.style.display = 'block';
-                        floor2Nav.style.display = 'none';
-                        floor3Nav.style.display = 'none';
-                        if (floorButtons.length >= 3) {
-                            floorButtons[0].style.background = 'white';
-                            floorButtons[0].style.color = '#FF5D07';
-                            floorButtons[1].style.background = 'transparent';
-                            floorButtons[1].style.color = 'white';
-                            floorButtons[2].style.background = 'transparent';
-                            floorButtons[2].style.color = 'white';
-                        }
-                    } else if (floor === 2) {
-                        floor1Nav.style.display = 'none';
-                        floor2Nav.style.display = 'block';
-                        floor3Nav.style.display = 'none';
-                        if (floorButtons.length >= 3) {
-                            floorButtons[0].style.background = 'transparent';
-                            floorButtons[0].style.color = 'white';
-                            floorButtons[1].style.background = 'white';
-                            floorButtons[1].style.color = '#FF5D07';
-                            floorButtons[2].style.background = 'transparent';
-                            floorButtons[2].style.color = 'white';
-                        }
-                    } else {
-                        floor1Nav.style.display = 'none';
-                        floor2Nav.style.display = 'none';
-                        floor3Nav.style.display = 'block';
-                        if (floorButtons.length >= 3) {
-                            floorButtons[0].style.background = 'transparent';
-                            floorButtons[0].style.color = 'white';
-                            floorButtons[1].style.background = 'transparent';
-                            floorButtons[1].style.color = 'white';
-                            floorButtons[2].style.background = 'white';
-                            floorButtons[2].style.color = '#FF5D07';
-                        }
-                    }
-                }
-
-                // Set active button
-                const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
-                const buttons = document.querySelectorAll(`#${currentFloorNav} .btn`);
-
-                buttons.forEach((btn, index) => {
-                    let expectedId = index + 1;
-                    if (floor === 2) expectedId = index + 10;
-                    if (floor === 3) expectedId = index + 20;
-                    if (expectedId == defaultId) {
-                        btn.classList.add('active-nav');
-                        btn.style.background = 'white';
-                        btn.style.color = '#FF5D07';
-                    }
-                });
-            }, 100);
-
-            // Inisialisasi carousel setelah display lantai di-set
-            setTimeout(() => {
-                initCarousel('floor1-nav');
-                initCarousel('floor2-nav');
-                initCarousel('floor3-nav');
-            }, 300);
-        });
-    </script>
+        }, 100);
+        setTimeout(() => {
+            initCarousel('floor1-nav');
+            initCarousel('floor2-nav');
+            initCarousel('floor3-nav');
+        }, 300);
+    });
+</script>
