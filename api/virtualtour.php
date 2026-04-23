@@ -188,6 +188,31 @@ if ($default_scene >= 10 && $default_scene <= 19) {
             max-width: 220px;
         }
     }
+    /* Membuat label hotspot selalu terlihat (tanpa perlu hover) */
+.pnlm-hotspot-text {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    color: white !important;
+    border-radius: 20px !important;
+    padding: 4px 12px !important;
+    font-size: 14px !important;
+    font-weight: normal !important;
+    white-space: nowrap !important;
+    margin-top: 25px !important;
+    transform: translateX(-50%) !important;
+    pointer-events: none !important;
+}
+
+/* Agar tidak terlalu besar di HP */
+@media (max-width: 768px) {
+    .pnlm-hotspot-text {
+        font-size: 10px !important;
+        padding: 2px 8px !important;
+        margin-top: 20px !important;
+    }
+}
 </style>
 
 <div class="content-wrapper" style="margin-top: 56px;">
