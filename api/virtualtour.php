@@ -87,13 +87,11 @@ if ($default_scene >= 10 && $default_scene <= 19) {
 <!-- <link rel="stylesheet" href="assets/css/bootstrap-icons.min.css"> -->
 
 <style>
-    /* Hanya hilangkan space putih di sekitar panorama */
-    body,
-    html {
+    /* Reset dasar */
+    body, html {
         margin: 0 !important;
         padding: 0 !important;
         background-color: #000;
-        /* Hitam di belakang panorama */
     }
 
     .content-wrapper {
@@ -102,18 +100,81 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         width: 100%;
     }
 
+    /* Default untuk laptop/desktop */
     #panorama-container {
-        margin: 0 !important;
-        padding: 0 !important;
         width: 100% !important;
         height: calc(100vh - 56px) !important;
-        /* Tinggi penuh dikurangi navbar */
+        margin: 0 !important;
+        padding: 0 !important;
+        background-color: #000;
     }
 
-    /* Responsif untuk handphone */
-    @media (max-width: 768px) {
+    /* Navigasi cepat (tampilan dasar) */
+    .quick-nav {
+        position: relative;
+        z-index: 1050;
+        background: transparent;
+        padding: 10px 0;
+    }
 
-        /* Container navigasi */
+    .floor-toggle {
+        position: fixed;
+        right: 10px;
+        top: 70px;
+        z-index: 1050;
+    }
+
+    .info-panel {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 1040;
+        max-width: 320px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        border-left: 4px solid #FF5D07;
+        pointer-events: auto;
+    }
+
+    /* ========== PERBAIKAN UNTUK HP (LAYAR ≤768px) ========== */
+    @media (max-width: 768px) {
+        /* Biarkan halaman bisa scroll vertikal */
+        body, html {
+            overflow: auto !important;
+            height: auto !important;
+        }
+
+        /* Container panorama tidak fullscreen agar ada ruang scroll */
+        .content-wrapper {
+            margin-top: 56px;
+            height: auto;
+            overflow: visible;
+        }
+
+        #panorama-container {
+            height: 60vh !important;   /* panorama tetap proporsional */
+            width: 100% !important;
+        }
+
+        /* Panel informasi berubah mengikuti alur dokumen (tidak fixed) */
+        .info-panel {
+            position: relative;
+            bottom: auto;
+            left: auto;
+            margin: 15px 10px;
+            max-height: 35vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+        }
+
+        .info-panel .card-body {
+            overflow-y: visible;
+            max-height: none;
+        }
+
+        /* Perbaikan navigasi carousel (agar tidak terlalu besar) */
         .quick-nav .floor-toggle-container {
             max-width: 280px !important;
             width: auto !important;
@@ -121,20 +182,17 @@ if ($default_scene >= 10 && $default_scene <= 19) {
             padding: 3px !important;
         }
 
-        /* Tombol navigasi */
         .quick-nav .btn {
             min-width: 48px !important;
             padding: 3px 5px !important;
             font-size: 0.65rem !important;
         }
 
-        /* Area scroll */
         .quick-nav .scroll-wrapper {
             max-width: 235px !important;
             padding: 0 18px !important;
         }
 
-        /* Tombol panah */
         .quick-nav .scroll-btn {
             width: 26px !important;
             height: 26px !important;
@@ -142,22 +200,56 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         }
     }
 
-    /* Untuk handphone yang lebih kecil */
+    /* Handphone lebih kecil (≤480px) */
     @media (max-width: 480px) {
         .quick-nav .floor-toggle-container {
             max-width: 260px !important;
             min-width: 220px;
         }
-
         .quick-nav .btn {
             min-width: 44px !important;
             padding: 3px 4px !important;
             font-size: 0.62rem !important;
         }
-
         .quick-nav .scroll-wrapper {
             max-width: 215px !important;
             padding: 0 16px !important;
+        }
+        .info-panel {
+            max-height: 40vh;
+            margin: 10px;
+        }
+    }
+
+    /* Laptop/Desktop lebar (≥992px) – pastikan fullscreen lagi */
+    @media (min-width: 992px) {
+        body, html {
+            overflow: hidden;
+            height: 100%;
+        }
+        .content-wrapper {
+            height: calc(100vh - 56px);
+            overflow: hidden;
+            margin-top: 56px;
+        }
+        #panorama-container {
+            height: 100% !important;
+        }
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+        .quick-nav {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .floor-toggle {
+            top: 80px;
         }
     }
 </style>
