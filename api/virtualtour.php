@@ -107,12 +107,13 @@ if ($default_scene >= 10 && $default_scene <= 19) {
 <!-- <link rel="stylesheet" href="assets/css/bootstrap-icons.min.css"> -->
 
 <style>
-    /* Hanya hilangkan space putih di sekitar panorama */
-    body,
-    html {
+    /* Reset dasar - body & html bisa scroll normal */
+    body, html {
         margin: 0 !important;
         padding: 0 !important;
         background-color: #000;
+        overflow: auto !important;
+        height: auto !important;
     }
 
     .content-wrapper {
@@ -121,11 +122,44 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         width: 100%;
     }
 
+    /* Container panorama - tidak fullscreen */
     #panorama-container {
+        width: 100% !important;
+        height: 60vh !important;  /* Sesuaikan nilai ini jika perlu */
         margin: 0 !important;
         padding: 0 !important;
-        width: 100% !important;
-        height: calc(100vh - 56px) !important;
+        background-color: #000;
+    }
+
+    /* Navigasi cepat - sticky di atas */
+    .quick-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1050;
+        background: transparent;
+        touch-action: manipulation;
+        padding: 10px 0;
+    }
+
+    /* Tombol pilih lantai (fixed di kanan) */
+    .floor-toggle {
+        position: fixed;
+        right: 10px;
+        top: 70px;
+        z-index: 1050;
+        touch-action: manipulation;
+    }
+
+    /* Panel informasi - mengikuti alur dokumen, bisa scroll sendiri */
+    .info-panel {
+        position: relative;
+        margin: 15px 10px;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        max-height: 30vh;
+        overflow-y: auto;
+        touch-action: pan-y;
     }
 
     /* Responsif untuk handphone */
@@ -150,8 +184,13 @@ if ($default_scene >= 10 && $default_scene <= 19) {
             height: 26px !important;
             font-size: 12px !important;
         }
+        .info-panel {
+            max-height: 35vh;
+            margin: 10px;
+        }
     }
 
+    /* Handphone lebih kecil */
     @media (max-width: 480px) {
         .quick-nav .floor-toggle-container {
             max-width: 260px !important;
@@ -168,7 +207,7 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         }
     }
 
-    /* PERBAIKAN UTAMA: Panel info bisa di-scroll di HP tanpa mengganggu panorama */
+    /* PERBAIKAN: panel info bisa di-scroll di HP tanpa mengganggu panorama */
     @media (max-width: 768px) {
         .info-panel {
             max-height: 35vh !important;
@@ -419,23 +458,7 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         "scenes": <?= json_encode($scenes) ?>
     });
 
-    // ========== PERBAIKAN UNTUK SCROLL PANEL DI HP ==========
-    document.addEventListener('DOMContentLoaded', function() {
-        if ('ontouchstart' in window) {
-            const infoPanel = document.querySelector('.info-panel');
-            if (infoPanel) {
-                infoPanel.addEventListener('touchstart', function(e) {
-                    e.stopPropagation();
-                });
-                infoPanel.addEventListener('touchmove', function(e) {
-                    e.stopPropagation();
-                    // Tidak mencegah default agar scroll tetap berjalan di dalam panel
-                }, { passive: false });
-            }
-        }
-    });
-
-    // ========== FUNGSI NAVIGASI DLL (TIDAK BERUBAH) ==========
+    // ========== FUNGSI NAVIGASI (SAMA SEPERTI ASLI) ==========
     function switchFloor(floor) {
         const floor1Nav = document.getElementById('floor1-nav');
         const floor2Nav = document.getElementById('floor2-nav');
@@ -644,7 +667,7 @@ if ($default_scene >= 10 && $default_scene <= 19) {
 
     window.addEventListener('resize', function () {
         const container = document.getElementById('panorama-container');
-        if (container) container.style.height = window.innerHeight + 'px';
+        if (container) container.style.height = window.innerHeight * 0.6 + 'px';
     });
 
     document.addEventListener('DOMContentLoaded', function () {
