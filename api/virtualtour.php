@@ -384,12 +384,11 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         const minZoom = 50;
         const maxZoom = 120;
 
-   const viewer = pannellum.viewer('panorama-container', {
-    "autoLoad": true,
-    "autoRotate": -1,
-    "crossOrigin": "anonymous", // Tambahkan baris ini
-    "default": {
-        "firstScene": "scene_<?= $default_scene ?>",
+        const viewer = pannellum.viewer('panorama-container', {
+            "autoLoad": true,
+            "autoRotate": -1,
+            "default": {
+                "firstScene": "scene_<?= $default_scene ?>",
                 "sceneFadeDuration": 300,
                 "hfov": currentHfov
             },
@@ -526,48 +525,28 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         }
 
         // Fungsi untuk set active nav
-    function setActiveNav(button, sceneId) {
-    if (!button) return;
+        function setActiveNav(button, sceneId) {
+            if (!button) return;
 
-    let floor = 1;
-    if (sceneId >= 10 && sceneId <= 19) floor = 2;
-    else if (sceneId >= 20) floor = 3;
+            let floor = 1;
+            if (sceneId >= 10 && sceneId <= 19) floor = 2;
+            else if (sceneId >= 20) floor = 3;
 
-    const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
+            const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
 
-    // Reset semua tombol di navigasi lantai aktif
-    const allNavButtons = document.querySelectorAll(`#${currentFloorNav} .btn`);
-    allNavButtons.forEach(btn => {
-        btn.classList.remove('active-nav');
-        btn.style.background = 'transparent';
-        btn.style.color = 'white';
-    });
+            const allNavButtons = document.querySelectorAll(`#${currentFloorNav} .btn`);
+            allNavButtons.forEach(btn => {
+                btn.classList.remove('active-nav');
+                btn.style.background = 'transparent';
+                btn.style.color = 'white';
+            });
 
-    // Aktifkan tombol yang diklik
-    button.classList.add('active-nav');
-    button.style.background = 'white';
-    button.style.color = '#FF5D07';
+            button.classList.add('active-nav');
+            button.style.background = 'white';
+            button.style.color = '#FF5D07';
 
-    // Update Nama & Deskripsi Ruangan dari data database
-    const data = lokasiData[sceneId];
-    if (data) {
-        document.getElementById('ruangan-nama').innerText = data.nama_lokasi;
-        document.getElementById('ruangan-deskripsi').innerText = data.deskripsi;
-    }
-
-    // Pindah Foto 360
-    viewer.loadScene('scene_' + sceneId);
-}
-
-
-// Tambahan: Update Nama & Deskripsi di panel kiri bawah
-const data = lokasiData[sceneId];
-if (data) {
-    document.getElementById('ruangan-nama').innerText = data.nama_lokasi;
-    document.getElementById('ruangan-deskripsi').innerText = data.deskripsi;
-}
-
-        
+            viewer.loadScene('scene_' + sceneId);
+        }
 
         // Event scenechange
         viewer.on('scenechange', function (sceneId) {
