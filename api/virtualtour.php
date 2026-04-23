@@ -223,6 +223,32 @@ if ($default_scene >= 10 && $default_scene <= 19) {
             max-height: none !important;
         }
     }
+    /* Perbaikan untuk laptop/desktop (layar >= 992px) */
+@media (min-width: 992px) {
+    #panorama-container {
+        height: calc(100vh - 56px) !important; /* Kembali fullscreen seperti semula */
+    }
+    .info-panel {
+        max-height: 25vh; /* Tetap bisa scroll jika perlu */
+        margin: 20px;
+    }
+    .quick-nav {
+        position: absolute; /* Tidak sticky di laptop, tidak mengganggu scroll */
+        top: 20px;
+    }
+    .floor-toggle {
+        top: 80px;
+    }
+    body, html {
+        overflow: hidden !important; /* Kunci scroll halaman di laptop (agar panorama fullscreen) */
+        height: 100% !important;
+    }
+    .content-wrapper {
+        margin-top: 56px;
+        height: calc(100vh - 56px);
+        overflow: hidden;
+    }
+}
 </style>
 
 <div class="content-wrapper" style="margin-top: 56px;">
