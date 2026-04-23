@@ -180,6 +180,27 @@ if ($default_scene >= 10 && $default_scene <= 19) {
             padding: 0 16px !important;
         }
     }
+    /* Agar panel info bisa di-scroll di HP tanpa mengganggu panorama */
+@media (max-width: 768px) {
+    .info-panel {
+        max-height: 30vh;          /* batasi tinggi maksimal */
+        overflow-y: auto;          /* scroll vertikal */
+        touch-action: pan-y;       /* hanya scroll vertikal, tidak horizontal */
+        -webkit-overflow-scrolling: touch;
+        pointer-events: auto;      /* biar bisa disentuh */
+    }
+    
+    .info-panel .card-body {
+        overflow-y: auto;
+        max-height: 25vh;
+    }
+    
+    /* Mencegah event touch dari panel mengenai viewer */
+    .info-panel,
+    .info-panel * {
+        touch-action: pan-y;       /* seluruh elemen dalam panel hanya scroll vertikal */
+    }
+}
 </style>
 
 <div class="content-wrapper" style="margin-top: 56px;">
@@ -415,6 +436,20 @@ if ($default_scene >= 10 && $default_scene <= 19) {
             },
             "scenes": <?= json_encode($scenes) ?>
         });
+
+      if ('ontouchstart' in window) {
+    const infoPanel = document.querySelector('.info-panel');
+    if (infoPanel) {
+        infoPanel.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
+        });
+        infoPanel.addEventListener('touchmove', function(e) {
+            e.stopPropagation();
+            // Jangan e.preventDefault() agar scroll tetap berjalan
+        }, { passive: false });
+    }
+}
+
 
         // Fungsi untuk switch antar lantai
         function switchFloor(floor) {
