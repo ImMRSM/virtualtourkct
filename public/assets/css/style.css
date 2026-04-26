@@ -1,16 +1,21 @@
 /* assets/css/style.css - Global Style */
+/* Reset total - hilangkan semua margin/padding di html & body */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: #f8f9fa;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin: 0;
-    /* Kompensasi untuk navbar sticky-top (70px = tinggi navbar) */
+    /* Ruang untuk konten di bawah navbar (70px sesuai tinggi navbar) */
     padding-top: 70px;
 }
 
-/* Khusus halaman virtualtour: batalkan padding karena sudah punya margin-top sendiri */
+/* Khusus halaman virtualtour: batalkan padding karena sudah punya margin-top sendiri di .content-wrapper */
 body.virtualtour-page {
     padding-top: 0;
 }
@@ -58,6 +63,7 @@ footer {
     background: #FF5D07 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 8px 0;
+    margin: 0;
 }
 
 .navbar-brand {
@@ -161,14 +167,12 @@ footer {
     box-shadow: 0 5px 15px rgba(255, 93, 7, 0.3);
 }
 
-/* ACTIVE STATE - saat tombol diklik */
 .quick-nav .btn:active {
     background-color: white !important;
     color: #FF5D07 !important;
     font-weight: 600;
 }
 
-/* ACTIVE CLASS - untuk tombol yang sedang aktif (ruangan yang sedang dibuka) */
 .quick-nav .btn.active {
     color: #FF5D07 !important;
 }
@@ -267,7 +271,7 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* Responsive */
+/* Responsive Footer */
 @media (max-width: 768px) {
     footer .row > div {
         margin-bottom: 0.5rem;
@@ -277,7 +281,7 @@ footer a:hover {
     }
 }
 
-/* Custom Divider Pemisah Antar Section */
+/* Custom Divider */
 .custom-divider {
     position: relative;
     margin: 50px auto;
@@ -307,7 +311,6 @@ footer a:hover {
     z-index: 2;
 }
 
-/* Titik kiri (kecil) */
 .divider-dots span:first-child {
     width: 13px;
     height: 13px;
@@ -317,7 +320,6 @@ footer a:hover {
     box-shadow: 0 0 8px rgba(255, 93, 7, 0.3);
 }
 
-/* Titik tengah (besar) */
 .divider-dots span:nth-child(2) {
     width: 20px;
     height: 20px;
@@ -329,7 +331,6 @@ footer a:hover {
     z-index: 3;
 }
 
-/* Titik kanan (kecil) */
 .divider-dots span:last-child {
     width: 13px;
     height: 13px;
@@ -339,14 +340,11 @@ footer a:hover {
     box-shadow: 0 0 8px rgba(255, 93, 7, 0.3);
 }
 
-/* Efek bertumpuk dengan negative margin */
 .divider-dots {
     gap: 5px;
 }
 
 /* ===== RESPONSIVE BREAKPOINTS ===== */
-
-/* Tablet (max-width: 992px) */
 @media (max-width: 992px) {
     .navbar-brand {
         font-size: 1rem;
@@ -371,7 +369,6 @@ footer a:hover {
     }
 }
 
-/* Mobile Landscape (max-width: 768px) */
 @media (max-width: 768px) {
     .navbar .container {
         padding-left: 15px;
@@ -441,7 +438,6 @@ footer a:hover {
     }
 }
 
-/* Mobile Portrait (max-width: 576px) */
 @media (max-width: 576px) {
     .hero-section h1.display-3 {
         font-size: 1.5rem;
@@ -521,7 +517,7 @@ footer a:hover {
     }
 }
 
-/* Hover effect untuk tombol panah */
+/* Hover & Active untuk tombol navigasi panorama */
 .scroll-btn:hover {
     background: white !important;
     color: #FF5D07 !important;
@@ -529,13 +525,11 @@ footer a:hover {
     border-color: #FF5D07 !important;
 }
 
-/* Hover effect untuk tombol ruangan */
 #floor1-nav .btn:hover, #floor2-nav .btn:hover {
     background: rgba(255, 255, 255, 0.2) !important;
     transform: translateY(-2px);
 }
 
-/* Active state untuk tombol ruangan */
 #floor1-nav .btn.active-nav, #floor2-nav .btn.active-nav {
     background: white !important;
     color: #FF5D07 !important;
@@ -543,7 +537,7 @@ footer a:hover {
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Responsif untuk navigasi cepat */
+/* Responsif navigasi cepat */
 @media (max-width: 576px) {
     #floor1-nav .btn, #floor2-nav .btn {
         min-width: 70px !important;
@@ -560,7 +554,7 @@ footer a:hover {
     }
 }
 
-/* Pastikan Lantai 2 memiliki style yang sama dengan Lantai 1 */
+/* Lantai 2 */
 #floor2-nav .btn {
     min-width: 85px;
     font-size: 0.85rem;
@@ -620,7 +614,7 @@ footer a:hover {
     }
 }
 
-/* Style untuk Lantai 3 */
+/* Lantai 3 */
 #floor3-nav .btn {
     min-width: 85px;
     font-size: 0.85rem;
