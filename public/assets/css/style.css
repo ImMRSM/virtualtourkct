@@ -6,6 +6,13 @@ body {
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
+    /* Kompensasi untuk navbar sticky-top (70px = tinggi navbar) */
+    padding-top: 70px;
+}
+
+/* Khusus halaman virtualtour: batalkan padding karena sudah punya margin-top sendiri */
+body.virtualtour-page {
+    padding-top: 0;
 }
 
 /* Sticky Footer */
@@ -153,6 +160,7 @@ footer {
     border-color: white;
     box-shadow: 0 5px 15px rgba(255, 93, 7, 0.3);
 }
+
 /* ACTIVE STATE - saat tombol diklik */
 .quick-nav .btn:active {
     background-color: white !important;
@@ -211,7 +219,7 @@ footer {
     width: 50px;
     height: 50px;
     border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid #FF5D07;  /* GANTI dari #0d6efd */
+    border-top: 4px solid #FF5D07;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     background: transparent !important;
@@ -333,41 +341,31 @@ footer a:hover {
 
 /* Efek bertumpuk dengan negative margin */
 .divider-dots {
-    gap: 5px;  /* Gap kecil biar rapat */
+    gap: 5px;
 }
 
 /* ===== RESPONSIVE BREAKPOINTS ===== */
 
 /* Tablet (max-width: 992px) */
 @media (max-width: 992px) {
-    /* Navbar */
     .navbar-brand {
         font-size: 1rem;
     }
-    
     .navbar-brand i {
         font-size: 1.2rem;
     }
-    
-    /* Hero Section */
     .hero-section h1.display-3 {
         font-size: 2.5rem;
     }
-    
     .hero-section .lead {
         font-size: 1.2rem;
     }
-    
-    /* About Page */
     .container.my-5 .row.align-items-center {
         gap: 2rem !important;
     }
-    
     .col-lg-6 img {
         height: 300px !important;
     }
-    
-    /* Layanan Cards */
     .card-body.p-5 {
         padding: 2rem !important;
     }
@@ -375,95 +373,69 @@ footer a:hover {
 
 /* Mobile Landscape (max-width: 768px) */
 @media (max-width: 768px) {
-    /* Navbar */
     .navbar .container {
         padding-left: 15px;
         padding-right: 15px;
     }
-    
     .navbar-nav {
         margin-top: 10px;
     }
-    
     .nav-item {
         margin: 2px 0 !important;
         width: 100%;
     }
-    
     .nav-link {
         text-align: center;
         padding: 10px !important;
     }
-    
-    /* Hero Section */
     .hero-section {
         min-height: 80vh;
     }
-    
     .hero-section h1.display-3 {
         font-size: 2rem;
     }
-    
     .hero-section .lead {
         font-size: 1rem;
         margin-top: 1rem !important;
     }
-    
     .hero-section .btn-lg {
         padding: 10px 30px !important;
         font-size: 1rem;
     }
-    
-    /* Spacer */
     div[style*="height: 56px"],
     div[style*="height: 58px"] {
         height: 50px !important;
     }
-    
-    /* About Page */
     .col-lg-6 img {
         height: 250px !important;
     }
-    
     .row.g-5 {
         gap: 2rem !important;
     }
-    
-    /* Layanan Cards */
     .row.g-4 {
         gap: 1rem;
     }
-    
     .card-body.p-5 {
         padding: 1.5rem !important;
     }
-    
-    /* Kontak Section */
     .col-lg-5 .d-flex {
         flex-direction: column;
         align-items: flex-start !important;
     }
-    
     .col-lg-5 .d-flex .me-3 {
         margin-bottom: 10px;
         margin-right: 0 !important;
     }
-    
-    /* Social Media Buttons */
     .d-flex.gap-3 {
         justify-content: center;
         flex-wrap: wrap;
     }
-    
-    /* Footer */
     footer .row {
         text-align: center !important;
     }
-    
     footer .col-md-6 {
         margin-bottom: 10px;
     }
-    
     footer .text-md-end {
         text-align: center !important;
     }
@@ -471,108 +443,79 @@ footer a:hover {
 
 /* Mobile Portrait (max-width: 576px) */
 @media (max-width: 576px) {
-    /* Hero Section */
     .hero-section h1.display-3 {
         font-size: 1.5rem;
     }
-    
     .hero-section .lead {
         font-size: 0.9rem;
     }
-    
     .hero-section .btn-lg {
         padding: 8px 20px !important;
         font-size: 0.9rem;
     }
-    
-    /* About Page */
     .col-lg-6 h2 {
         font-size: 1.5rem;
     }
-    
     .col-lg-6 p {
         font-size: 0.9rem;
     }
-    
     .col-lg-6 img {
         height: 200px !important;
     }
-    
     .col-md-6 h6 {
         font-size: 0.9rem;
     }
-    
     .col-md-6 p.small {
         font-size: 0.8rem;
     }
-    
-    /* Layanan Cards */
     .card-body.p-5 {
         padding: 1rem !important;
     }
-    
     .card-body i.fs-1 {
         font-size: 2rem !important;
     }
-    
     .card-body h5 {
         font-size: 1rem;
     }
-    
     .card-body p.small {
         font-size: 0.75rem;
     }
-    
-    /* Custom Divider */
     .custom-divider {
         width: 70%;
     }
-    
     .divider-dots span:first-child,
     .divider-dots span:last-child {
         width: 10px;
         height: 10px;
     }
-    
     .divider-dots span:nth-child(2) {
         width: 15px;
         height: 15px;
     }
-    
-    /* Kontak Section */
     .col-lg-5 h2 {
         font-size: 1.5rem;
         text-align: center;
     }
-    
     .d-flex.mb-4 {
         margin-bottom: 1.5rem !important;
     }
-    
     .d-flex.mb-4 i.fs-4 {
         font-size: 1.2rem !important;
     }
-    
     .d-flex.mb-4 h6 {
         font-size: 0.9rem;
     }
-    
-    /* Google Maps */
     .col-lg-7 .rounded-4 {
         padding: 1rem !important;
     }
-    
     .col-lg-7 iframe {
         height: 250px;
     }
-    
-    /* Social Media Buttons */
     .btn-outline-secondary.rounded-circle {
         width: 40px !important;
         height: 40px !important;
         padding: 0.5rem !important;
     }
-    
     .btn-outline-secondary i {
         font-size: 1rem !important;
     }
@@ -600,20 +543,18 @@ footer a:hover {
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Responsif */
+/* Responsif untuk navigasi cepat */
 @media (max-width: 576px) {
     #floor1-nav .btn, #floor2-nav .btn {
         min-width: 70px !important;
         font-size: 0.7rem !important;
         padding: 4px 6px !important;
     }
-    
     .scroll-btn {
         width: 30px !important;
         height: 30px !important;
         font-size: 20px !important;
     }
-    
     .scroll-wrapper {
         max-width: 350px !important;
     }
@@ -636,13 +577,11 @@ footer a:hover {
     margin-right: 4px;
 }
 
-/* Hover effect untuk Lantai 2 */
 #floor2-nav .btn:hover {
     background: rgba(255, 255, 255, 0.2) !important;
     transform: translateY(-2px);
 }
 
-/* Active state untuk Lantai 2 */
 #floor2-nav .btn.active-nav {
     background: white !important;
     color: #FF5D07 !important;
@@ -650,14 +589,12 @@ footer a:hover {
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Responsif Lantai 2 */
 @media (max-width: 768px) {
     #floor2-nav .btn {
         min-width: 75px !important;
         font-size: 0.75rem !important;
         padding: 6px 8px !important;
     }
-    
     #floor2-nav .btn i {
         font-size: 0.8rem !important;
         margin-right: 3px !important;
@@ -678,7 +615,6 @@ footer a:hover {
         font-size: 0.65rem !important;
         padding: 4px 4px !important;
     }
-    
     #floor2-nav .btn i {
         display: none !important;
     }
@@ -708,7 +644,6 @@ footer a:hover {
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Responsif Lantai 3 */
 @media (max-width: 768px) {
     #floor3-nav .btn {
         min-width: 75px !important;
@@ -731,7 +666,6 @@ footer a:hover {
         font-size: 0.65rem !important;
         padding: 4px 4px !important;
     }
-    
     #floor3-nav .btn i {
         display: none !important;
     }
