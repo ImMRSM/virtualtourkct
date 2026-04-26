@@ -207,87 +207,87 @@ $pegawai = [
     ],
 
     // PELAYANAN PKH (Lantai 2)
-    [
-        'nama' => 'Yoshinta Lusiari, S.Tr.Sos.',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mengelola Program Keluarga Harapan (PKH), pendataan, dan verifikasi penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh1.jpg',
-        'kategori' => 'pkh'
-    ],
-    [
-        'nama' => 'Didin Cahyanto',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh2.jpg',
-        'kategori' => 'pkh'
-    ],
-    [
-        'nama' => 'Eneng',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh3.jpg',
-        'kategori' => 'pkh'
-    ],
-    [
-        'nama' => 'Riesta Putri',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh4.jpg',
-        'kategori' => 'pkh'
-    ],
-    [
-        'nama' => 'Lita Marliani',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh5.jpg',
-        'kategori' => 'pkh'
-    ],
-    [
-        'nama' => 'Oky Aji Pamungkas, S.Tr.Sos.',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh5.jpg',
-        'kategori' => 'pkh'
-    ],
-    [
-        'nama' => 'Shinta Hartono, S.Tr.Sos.',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh5.jpg',
-        'kategori' => 'pkh'
-    ],
-    [
-        'nama' => 'Elis',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh5.jpg',
-        'kategori' => 'pkh'
-    ],
-    [
-        'nama' => 'Lia',
-        'jabatan' => 'Petugas PKH',
-        'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
-        'ruangan' => 'Ruang PKH',
-        'lantai' => 2,
-        'foto' => '../assets/img/pkh5.jpg',
-        'kategori' => 'pkh'
-    ],
+    // [
+    //     'nama' => 'Yoshinta Lusiari, S.Tr.Sos.',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mengelola Program Keluarga Harapan (PKH), pendataan, dan verifikasi penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh1.jpg',
+    //     'kategori' => 'pkh'
+    // ],
+    // [
+    //     'nama' => 'Didin Cahyanto',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh2.jpg',
+    //     'kategori' => 'pkh'
+    // ],
+    // [
+    //     'nama' => 'Eneng',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh3.jpg',
+    //     'kategori' => 'pkh'
+    // ],
+    // [
+    //     'nama' => 'Riesta Putri',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh4.jpg',
+    //     'kategori' => 'pkh'
+    // ],
+    // [
+    //     'nama' => 'Lita Marliani',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh5.jpg',
+    //     'kategori' => 'pkh'
+    // ],
+    // [
+    //     'nama' => 'Oky Aji Pamungkas, S.Tr.Sos.',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh5.jpg',
+    //     'kategori' => 'pkh'
+    // ],
+    // [
+    //     'nama' => 'Shinta Hartono, S.Tr.Sos.',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh5.jpg',
+    //     'kategori' => 'pkh'
+    // ],
+    // [
+    //     'nama' => 'Elis',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh5.jpg',
+    //     'kategori' => 'pkh'
+    // ],
+    // [
+    //     'nama' => 'Lia',
+    //     'jabatan' => 'Petugas PKH',
+    //     'tugas' => 'Mendampingi peserta PKH dan memverifikasi data penerima manfaat.',
+    //     'ruangan' => 'Ruang PKH',
+    //     'lantai' => 2,
+    //     'foto' => '../assets/img/pkh5.jpg',
+    //     'kategori' => 'pkh'
+    // ],
 
     // KASUBAG UMUM DAN KEPEGAWAIAN (Lantai 3)
     [
@@ -467,8 +467,8 @@ $pegawai = [
                         style="background: #e9ecef; color: #FF5D07; border-radius: 50px; padding: 8px 25px;">Sarpras</button>
                     <button class="btn filter-btn" data-filter="pemberdayaan"
                         style="background: #e9ecef; color: #FF5D07; border-radius: 50px; padding: 8px 25px;">Pemberdayaan</button>
-                    <button class="btn filter-btn" data-filter="pkh"
-                        style="background: #e9ecef; color: #FF5D07; border-radius: 50px; padding: 8px 25px;">PKH</button>
+                    <!-- <button class="btn filter-btn" data-filter="pkh"
+                        style="background: #e9ecef; color: #FF5D07; border-radius: 50px; padding: 8px 25px;">PKH</button> -->
             </div>
         </div>
 
