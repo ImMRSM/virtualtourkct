@@ -1,5 +1,8 @@
-/* assets/css/style.css - Global Style */
-/* Reset total - hilangkan semua margin/padding di html & body */
+/* ============================================
+   assets/css/style.css - Global Style
+   ============================================ */
+
+/* ---------- RESET TOTAL ---------- */
 html, body {
     margin: 0 !important;
     padding: 0 !important;
@@ -11,25 +14,75 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* Ruang untuk konten di bawah navbar (70px sesuai tinggi navbar) */
-    padding-top: 70px;
+    padding-top: 70px; /* ruang untuk navbar fixed/sticky */
 }
 
-/* Khusus halaman virtualtour: batalkan padding karena sudah punya margin-top sendiri di .content-wrapper */
+/* ---------- NAVBAR STICKY/ FIXED - PASTIKAN SELALU DI ATAS ---------- */
+.navbar {
+    background: #FF5D07 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 0;
+    margin: 0;
+    /* STICKY dengan z-index tertinggi */
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+    /* Tambahan untuk performa */
+    backdrop-filter: none;
+}
+
+/* Pastikan elemen lain (panorama) tidak menutupi navbar */
+.pnlm-container,
+.pnlm-panorama,
+#panorama-container,
+.pnlm-zoom-controls,
+.pnlm-loading {
+    z-index: 1 !important;
+}
+
+/* ---------- KHUSUS VIRTUAL TOUR: HAPUS PADDING-TOP BODY ---------- */
 body.virtualtour-page {
-    padding-top: 0;
+    padding-top: 0 !important;
 }
 
-/* Sticky Footer */
+/* ---------- MAIN & FOOTER ---------- */
 main {
     flex: 1 0 auto;
 }
 
 footer {
     flex-shrink: 0;
+    background: #FF5D07;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    border-top: none;
 }
 
-/* Hero Section */
+footer .text-secondary {
+    color: #ffffff !important;
+}
+
+footer .fw-semibold {
+    font-weight: 500;
+    color: #ffffff;
+}
+
+footer i {
+    font-size: 0.9rem;
+    vertical-align: middle;
+    color: #ffffff;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- HERO SECTION ---------- */
 .hero-section {
     background-size: cover;
     background-position: center;
@@ -58,14 +111,7 @@ footer {
     z-index: 2;
 }
 
-/* Navbar Styling - ORANYE */
-.navbar {
-    background: #FF5D07 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 8px 0;
-    margin: 0;
-}
-
+/* ---------- NAVBAR LINK STYLING ---------- */
 .navbar-brand {
     color: white !important;
     font-size: 1.1rem;
@@ -114,7 +160,7 @@ footer {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
 }
 
-/* Card Styling */
+/* ---------- CARD ---------- */
 .card {
     border: none;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -124,7 +170,7 @@ footer {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Virtual Tour Components */
+/* ---------- VIRTUAL TOUR COMPONENTS ---------- */
 .info-panel {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -214,7 +260,7 @@ footer {
     z-index: 10;
 }
 
-/* Loading Animation */
+/* ---------- LOADING ANIMATION PANNELUM ---------- */
 .pnlm-loading {
     position: absolute;
     top: 50%;
@@ -239,49 +285,7 @@ footer {
     100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Footer styling - ORANYE */
-footer {
-    font-family: 'Inter', sans-serif;
-    background: #FF5D07;
-    width: 100%;
-    border-top: none;
-}
-
-footer .text-secondary {
-    color: #ffffff !important;
-}
-
-footer .fw-semibold {
-    font-weight: 500;
-    color: #ffffff;
-}
-
-footer i {
-    font-size: 0.9rem;
-    vertical-align: middle;
-    color: #ffffff;
-}
-
-footer a {
-    color: #ffffff;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive Footer */
-@media (max-width: 768px) {
-    footer .row > div {
-        margin-bottom: 0.5rem;
-    }
-    footer .row > div:last-child {
-        margin-bottom: 0;
-    }
-}
-
-/* Custom Divider */
+/* ---------- CUSTOM DIVIDER ---------- */
 .custom-divider {
     position: relative;
     margin: 50px auto;
@@ -344,7 +348,7 @@ footer a:hover {
     gap: 5px;
 }
 
-/* ===== RESPONSIVE BREAKPOINTS ===== */
+/* ---------- RESPONSIVE BREAKPOINTS ---------- */
 @media (max-width: 992px) {
     .navbar-brand {
         font-size: 1rem;
@@ -517,7 +521,7 @@ footer a:hover {
     }
 }
 
-/* Hover & Active untuk tombol navigasi panorama */
+/* ---------- STYLE KHUSUS UNTUK BUTTON NAVIGASI PANORAMA ---------- */
 .scroll-btn:hover {
     background: white !important;
     color: #FF5D07 !important;
@@ -537,7 +541,6 @@ footer a:hover {
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Responsif navigasi cepat */
 @media (max-width: 576px) {
     #floor1-nav .btn, #floor2-nav .btn {
         min-width: 70px !important;
