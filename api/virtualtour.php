@@ -49,16 +49,6 @@ foreach ($lokasi as $id => $l) {
     ];
 }
 
-// Data untuk mini map
-$map_data = [];
-foreach ($lokasi as $id => $l) {
-    $map_data[$id] = [
-        'nama' => $l['nama_lokasi'],
-        'x' => $l['map_x'],
-        'y' => $l['map_y']
-    ];
-}
-
 // Tentukan lantai berdasarkan ID
 $current_floor = 1;
 if ($default_scene >= 10 && $default_scene <= 19) {
@@ -70,13 +60,10 @@ if ($default_scene >= 10 && $default_scene <= 19) {
 
 <!-- Pannellum CSS & JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
-<!-- <link rel="stylesheet" href="assets/css/panellum.css"> -->
 <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
-<!-- <script src="assets/js/panellum.js"></script> -->
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- <script src="assets/js/bootstrap.bundle.min.js"></script> -->
 
 <!-- Virtual Tour Custom CSS -->
 <link rel="stylesheet" href="assets/css/virtualtour.css">
@@ -84,15 +71,15 @@ if ($default_scene >= 10 && $default_scene <= 19) {
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<!-- <link rel="stylesheet" href="assets/css/bootstrap-icons.min.css"> -->
 
 <style>
+    /* Reset & fullscreen */
     body, html {
         margin: 0 !important;
         padding: 0 !important;
         background-color: #000;
-        overflow: hidden;
         height: 100%;
+        overflow: hidden; /* konten VR diatur scrolling sendiri */
     }
 
     .content-wrapper {
@@ -100,9 +87,9 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         padding: 0 !important;
         width: 100%;
         height: 100vh;
-        margin-top: 56px;
-        height: calc(100vh - 56px);
+        margin-top: 0;
         overflow: hidden;
+        position: relative;
     }
 
     #panorama-container {
@@ -112,6 +99,7 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         padding: 0 !important;
     }
 
+    /* Navigasi ruangan (quick-nav) */
     .quick-nav {
         position: absolute;
         top: 20px;
@@ -124,6 +112,7 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         white-space: nowrap;
     }
 
+    /* Tombol pilih lantai vertikal */
     .floor-toggle {
         position: fixed;
         right: 10px;
@@ -131,6 +120,7 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         z-index: 1050;
     }
 
+    /* Panel informasi ruangan */
     .info-panel {
         position: fixed;
         bottom: 20px;
@@ -144,7 +134,50 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         pointer-events: auto;
     }
 
-    /* Responsif untuk handphone (hanya kecilkan ukuran font/tombol, tidak ubah layout) */
+    /* TOMBOL KELUAR - pojok kanan bawah, selalu terlihat */
+    .exit-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        background: #FF5D07;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 40px;
+        text-decoration: none;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        border: none;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+    .exit-btn:hover {
+        background: white;
+        color: #FF5D07;
+        transform: scale(1.02);
+    }
+
+    /* Hotspot text */
+    .pnlm-hotspot-text {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        background: rgba(0, 0, 0, 0.7) !important;
+        color: white !important;
+        border-radius: 20px !important;
+        padding: 4px 12px !important;
+        font-size: 14px !important;
+        font-weight: normal !important;
+        white-space: nowrap !important;
+        margin-top: 25px !important;
+        transform: translateX(-50%) !important;
+        pointer-events: none !important;
+    }
+
+    /* Responsive adjustments */
     @media (max-width: 768px) {
         .quick-nav .btn {
             min-width: 48px !important;
@@ -172,6 +205,17 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         .info-panel p {
             font-size: 0.7rem;
         }
+        .exit-btn {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            bottom: 15px;
+            right: 15px;
+        }
+        .pnlm-hotspot-text {
+            font-size: 10px !important;
+            padding: 2px 8px !important;
+            margin-top: 20px !important;
+        }
     }
 
     @media (max-width: 480px) {
@@ -188,38 +232,18 @@ if ($default_scene >= 10 && $default_scene <= 19) {
             max-width: 220px;
         }
     }
-    /* Membuat label hotspot selalu terlihat (tanpa perlu hover) */
-.pnlm-hotspot-text {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    background: rgba(0, 0, 0, 0.7) !important;
-    color: white !important;
-    border-radius: 20px !important;
-    padding: 4px 12px !important;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    white-space: nowrap !important;
-    margin-top: 25px !important;
-    transform: translateX(-50%) !important;
-    pointer-events: none !important;
-}
-
-/* Agar tidak terlalu besar di HP */
-@media (max-width: 768px) {
-    .pnlm-hotspot-text {
-        font-size: 10px !important;
-        padding: 2px 8px !important;
-        margin-top: 20px !important;
-    }
-}
 </style>
 
-<div class="content-wrapper" style="margin-top: 56px;">
-    <!-- Panorama Container - Full screen -->
+<div class="content-wrapper">
+    <!-- Tombol Keluar (selalu di atas) -->
+    <a href="index.php" class="exit-btn" title="Kembali ke Beranda">
+        <i class="bi bi-box-arrow-right"></i> Keluar
+    </a>
+
+    <!-- Panorama Container -->
     <div id="panorama-container"></div>
 
-    <!-- Panel Informasi Ruangan - Kiri Bawah -->
+    <!-- Panel Informasi Ruangan -->
     <div class="info-panel">
         <div class="card border-0 shadow-lg rounded-4 overflow-hidden"
             style="backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.9); border-left: 4px solid #FF5D07;">
@@ -227,179 +251,88 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                 <h6 class="fw-bold mb-1" id="ruangan-nama" style="font-size: 1rem;">
                     <?= $lokasi[$default_scene]['nama_lokasi'] ?>
                 </h6>
-                <p class="text-secondary small mb-0" id="ruangan-deskripsi"
-                    style="font-size: 0.85rem; line-height: 1.5;">
+                <p class="text-secondary small mb-0" id="ruangan-deskripsi" style="font-size: 0.85rem; line-height: 1.5;">
                     <?= $lokasi[$default_scene]['deskripsi'] ?>
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- Navigasi Cepat - Atas Tengah -->
+    <!-- ========== Navigasi Cepat (Quick Nav) ========== -->
     <div class="quick-nav" style="text-align: center; margin: 0; padding: 0; background: transparent;">
 
-        <!-- Navigasi ruangan Lantai 1 (ID 1-9) -->
+        <!-- Lantai 1 (ID 1-9) -->
         <div id="floor1-nav" class="floor-toggle-container position-relative mx-auto"
             style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); border-radius: 60px; padding: 4px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 20px rgba(0,0,0,0.4); max-width: 550px; width: fit-content; display: <?= $current_floor == 1 ? 'block' : 'none' ?>;">
-
-            <!-- Tombol panah kiri -->
-            <button class="scroll-btn scroll-left position-absolute top-50 start-0 translate-middle-y"
-                style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); left: -5px; font-size: 24px; font-weight: bold; transition: all 0.2s ease;">
-                <i class="bi bi-caret-left-fill"></i>
-            </button>
-
-            <!-- Container scroll -->
-            <div class="scroll-wrapper"
-                style="overflow-x: auto; white-space: nowrap; padding: 0px 30px; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; width: 100%; max-width: 500px; margin: 0 auto;">
-                <div class="d-inline-flex gap-1" style="min-width: min-content;">
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 1)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Depan
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 2)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Kasi Yanum
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 3)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Aula
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 4)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Parkiran
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 5)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Toilet 1
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 6)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Karang Taruna
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 7)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Taman
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 8)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Gudang
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 9)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        R. Rapat 2
-                    </button>
-                </div>
-            </div>
-
-            <!-- Tombol panah kanan -->
-            <button class="scroll-btn scroll-right position-absolute top-50 end-0 translate-middle-y"
-                style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); right: -5px; font-size: 24px; font-weight: bold; transition: all 0.2s ease;">
-                <i class="bi bi-caret-right-fill"></i>
-            </button>
-        </div>
-
-        <!-- Navigasi ruangan Lantai 2 (ID 10-20) -->
-        <div id="floor2-nav" class="floor-toggle-container position-relative mx-auto"
-            style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); border-radius: 60px; padding: 4px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 20px rgba(0,0,0,0.4); max-width: 550px; width: fit-content; display: <?= $current_floor == 2 ? 'block' : 'none' ?>;">
-
-            <!-- Tombol panah kiri -->
-            <button class="scroll-btn scroll-left position-absolute top-50 start-0 translate-middle-y"
-                style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); left: -5px; font-size: 24px; font-weight: bold; transition: all 0.2s ease;">
-                <i class="bi bi-caret-left-fill"></i>
-            </button>
-
-            <!-- Container scroll -->
-            <div class="scroll-wrapper"
-                style="overflow-x: auto; white-space: nowrap; padding: 0px 30px; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; width: 100%; max-width: 500px; margin: 0 auto;">
-                <div class="d-inline-flex gap-1" style="min-width: min-content;">
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 10)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Pelayanan PKH
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 11)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Ruang Tamu
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 12)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Lorong Lantai 2
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 13)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Toilet 2
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 14)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Mushola
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 15)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Kasi Pemberdayaan
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 16)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Kasi Eksos
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 17)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Kasi Sarpras
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 18)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Kasi Pemtra
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 19)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px; transition: all 0.2s ease; font-weight: 500;">
-                        Dapur
-                    </button>
-                </div>
-            </div>
-
-            <!-- Tombol panah kanan -->
-            <button class="scroll-btn scroll-right position-absolute top-50 end-0 translate-middle-y"
-                style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); right: -5px; font-size: 24px; font-weight: bold; transition: all 0.2s ease;">
-                <i class="bi bi-caret-right-fill"></i>
-            </button>
-        </div>
-
-        <!-- Navigasi ruangan Lantai 3 (ID 20-24) -->
-        <div id="floor3-nav" class="floor-toggle-container position-relative mx-auto"
-            style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); border-radius: 60px; padding: 4px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 20px rgba(0,0,0,0.4); max-width: 550px; width: fit-content; display: <?= $current_floor == 3 ? 'block' : 'none' ?>;">
-
-            <!-- Tombol panah kiri -->
             <button class="scroll-btn scroll-left position-absolute top-50 start-0 translate-middle-y"
                 style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); left: -5px; font-size: 24px;">
                 <i class="bi bi-caret-left-fill"></i>
             </button>
-
-            <!-- Container scroll -->
             <div class="scroll-wrapper"
                 style="overflow-x: auto; white-space: nowrap; padding: 0px 30px; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; width: 100%; max-width: 500px; margin: 0 auto;">
                 <div class="d-inline-flex gap-1" style="min-width: min-content;">
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 20)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">
-                        Lorong Lantai 3
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 21)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">
-                        Rapat 3
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 22)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">
-                        Kasubag Umpeg
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 23)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">
-                        Kasubag Progkeu
-                    </button>
-                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 24)"
-                        style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">
-                        Toilet 3
-                    </button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 1)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Depan</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 2)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Kasi Yanum</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 3)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Aula</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 4)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Parkiran</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 5)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Toilet 1</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 6)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Karang Taruna</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 7)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Taman</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 8)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Gudang</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 9)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">R. Rapat 2</button>
                 </div>
             </div>
+            <button class="scroll-btn scroll-right position-absolute top-50 end-0 translate-middle-y"
+                style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); right: -5px; font-size: 24px;">
+                <i class="bi bi-caret-right-fill"></i>
+            </button>
+        </div>
 
-            <!-- Tombol panah kanan -->
+        <!-- Lantai 2 (ID 10-19) -->
+        <div id="floor2-nav" class="floor-toggle-container position-relative mx-auto"
+            style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); border-radius: 60px; padding: 4px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 20px rgba(0,0,0,0.4); max-width: 550px; width: fit-content; display: <?= $current_floor == 2 ? 'block' : 'none' ?>;">
+            <button class="scroll-btn scroll-left position-absolute top-50 start-0 translate-middle-y"
+                style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); left: -5px; font-size: 24px;">
+                <i class="bi bi-caret-left-fill"></i>
+            </button>
+            <div class="scroll-wrapper"
+                style="overflow-x: auto; white-space: nowrap; padding: 0px 30px; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; width: 100%; max-width: 500px; margin: 0 auto;">
+                <div class="d-inline-flex gap-1" style="min-width: min-content;">
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 10)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Pelayanan PKH</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 11)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Ruang Tamu</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 12)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Lorong Lantai 2</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 13)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Toilet 2</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 14)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Mushola</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 15)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Kasi Pemberdayaan</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 16)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Kasi Eksos</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 17)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Kasi Sarpras</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 18)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Kasi Pemtra</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 19)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Dapur</button>
+                </div>
+            </div>
+            <button class="scroll-btn scroll-right position-absolute top-50 end-0 translate-middle-y"
+                style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); right: -5px; font-size: 24px;">
+                <i class="bi bi-caret-right-fill"></i>
+            </button>
+        </div>
+
+        <!-- Lantai 3 (ID 20-24) -->
+        <div id="floor3-nav" class="floor-toggle-container position-relative mx-auto"
+            style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); border-radius: 60px; padding: 4px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 20px rgba(0,0,0,0.4); max-width: 550px; width: fit-content; display: <?= $current_floor == 3 ? 'block' : 'none' ?>;">
+            <button class="scroll-btn scroll-left position-absolute top-50 start-0 translate-middle-y"
+                style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); left: -5px; font-size: 24px;">
+                <i class="bi bi-caret-left-fill"></i>
+            </button>
+            <div class="scroll-wrapper"
+                style="overflow-x: auto; white-space: nowrap; padding: 0px 30px; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; width: 100%; max-width: 500px; margin: 0 auto;">
+                <div class="d-inline-flex gap-1" style="min-width: min-content;">
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 20)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Lorong Lantai 3</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 21)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Rapat 3</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 22)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Kasubag Umpeg</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 23)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Kasubag Progkeu</button>
+                    <button class="btn btn-sm px-3 py-2" onclick="setActiveNav(this, 24)" style="min-width: 85px; font-size: 0.85rem; color: white; background: transparent; border: none; border-radius: 50px;">Toilet 3</button>
+                </div>
+            </div>
             <button class="scroll-btn scroll-right position-absolute top-50 end-0 translate-middle-y"
                 style="z-index: 20; background: #FF5D07; border: 2px solid white; border-radius: 50%; width: 36px; height: 36px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); right: -5px; font-size: 24px;">
                 <i class="bi bi-caret-right-fill"></i>
@@ -407,56 +340,165 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         </div>
     </div>
 
-    <!-- Tombol pilih lantai - VERTIKAL -->
+    <!-- Tombol pilih lantai vertikal -->
     <div class="floor-toggle position-absolute top-0 end-0 m-3" style="z-index: 1050;">
         <div class="floor-toggle-container"
             style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); border-radius: 50px; padding: 5px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
             <div class="d-flex flex-column gap-1">
                 <button class="btn btn-sm" onclick="switchFloor(1)" title="Lantai 1"
-                    style="width: 40px; height: 40px; border-radius: 50%; background: <?= $current_floor == 1 ? 'white' : 'transparent' ?>; border: none; color: <?= $current_floor == 1 ? '#FF5D07' : 'white' ?>; font-weight: bold;">
-                    1
-                </button>
+                    style="width: 40px; height: 40px; border-radius: 50%; background: <?= $current_floor == 1 ? 'white' : 'transparent' ?>; border: none; color: <?= $current_floor == 1 ? '#FF5D07' : 'white' ?>; font-weight: bold;">1</button>
                 <button class="btn btn-sm" onclick="switchFloor(2)" title="Lantai 2"
-                    style="width: 40px; height: 40px; border-radius: 50%; background: <?= $current_floor == 2 ? 'white' : 'transparent' ?>; border: none; color: <?= $current_floor == 2 ? '#FF5D07' : 'white' ?>; font-weight: bold;">
-                    2
-                </button>
+                    style="width: 40px; height: 40px; border-radius: 50%; background: <?= $current_floor == 2 ? 'white' : 'transparent' ?>; border: none; color: <?= $current_floor == 2 ? '#FF5D07' : 'white' ?>; font-weight: bold;">2</button>
                 <button class="btn btn-sm" onclick="switchFloor(3)" title="Lantai 3"
-                    style="width: 40px; height: 40px; border-radius: 50%; background: <?= $current_floor == 3 ? 'white' : 'transparent' ?>; border: none; color: <?= $current_floor == 3 ? '#FF5D07' : 'white' ?>; font-weight: bold;">
-                    3
-                </button>
+                    style="width: 40px; height: 40px; border-radius: 50%; background: <?= $current_floor == 3 ? 'white' : 'transparent' ?>; border: none; color: <?= $current_floor == 3 ? '#FF5D07' : 'white' ?>; font-weight: bold;">3</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        const lokasiData = <?= json_encode($lokasi) ?>;
-        const defaultScene = <?= $default_scene ?>;
+<script>
+    const lokasiData = <?= json_encode($lokasi) ?>;
+    const defaultScene = <?= $default_scene ?>;
 
-        // Variabel untuk menyimpan nilai zoom saat ini
-        let currentHfov = 100;
-        const minZoom = 50;
-        const maxZoom = 120;
+    let currentHfov = 100;
+    const viewer = pannellum.viewer('panorama-container', {
+        "autoLoad": true,
+        "autoRotate": -1,
+        "default": {
+            "firstScene": "scene_<?= $default_scene ?>",
+            "sceneFadeDuration": 300,
+            "hfov": currentHfov
+        },
+        "scenes": <?= json_encode($scenes) ?>
+    });
 
-        const viewer = pannellum.viewer('panorama-container', {
-            "autoLoad": true,
-            "autoRotate": -1,
-            "default": {
-                "firstScene": "scene_<?= $default_scene ?>",
-                "sceneFadeDuration": 300,
-                "hfov": currentHfov
-            },
-            "scenes": <?= json_encode($scenes) ?>
+    // Fungsi update tombol carousel
+    function updateCarouselButtons(containerId) {
+        const navElement = document.getElementById(containerId);
+        if (!navElement || navElement.style.display === 'none') return;
+        const container = navElement.querySelector('.scroll-wrapper');
+        const leftBtn = navElement.querySelector('.scroll-left');
+        const rightBtn = navElement.querySelector('.scroll-right');
+        if (!container || !leftBtn || !rightBtn) return;
+        const canScrollLeft = container.scrollLeft > 5;
+        const canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth - 5);
+        leftBtn.style.display = canScrollLeft ? 'flex' : 'none';
+        rightBtn.style.display = canScrollRight ? 'flex' : 'none';
+    }
+
+    // Inisialisasi carousel
+    function initCarousel(containerId) {
+        const navElement = document.getElementById(containerId);
+        if (!navElement) return;
+        const container = navElement.querySelector('.scroll-wrapper');
+        let leftBtn = navElement.querySelector('.scroll-left');
+        let rightBtn = navElement.querySelector('.scroll-right');
+        if (!container || !leftBtn || !rightBtn) return;
+        // clone to remove old events
+        const newLeftBtn = leftBtn.cloneNode(true);
+        const newRightBtn = rightBtn.cloneNode(true);
+        leftBtn.parentNode.replaceChild(newLeftBtn, leftBtn);
+        rightBtn.parentNode.replaceChild(newRightBtn, rightBtn);
+        leftBtn = navElement.querySelector('.scroll-left');
+        rightBtn = navElement.querySelector('.scroll-right');
+        leftBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            container.scrollBy({ left: -container.clientWidth, behavior: 'smooth' });
+            setTimeout(() => updateCarouselButtons(containerId), 100);
         });
+        rightBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
+            setTimeout(() => updateCarouselButtons(containerId), 100);
+        });
+        container.addEventListener('scroll', () => requestAnimationFrame(() => updateCarouselButtons(containerId)));
+        window.addEventListener('resize', () => updateCarouselButtons(containerId));
+        setTimeout(() => updateCarouselButtons(containerId), 200);
+    }
 
-        // Fungsi untuk switch antar lantai
-        function switchFloor(floor) {
-            const floor1Nav = document.getElementById('floor1-nav');
-            const floor2Nav = document.getElementById('floor2-nav');
-            const floor3Nav = document.getElementById('floor3-nav');
-            const floorButtons = document.querySelectorAll('.floor-toggle .btn');
+    // Ganti lantai
+    function switchFloor(floor) {
+        const floor1Nav = document.getElementById('floor1-nav');
+        const floor2Nav = document.getElementById('floor2-nav');
+        const floor3Nav = document.getElementById('floor3-nav');
+        const floorButtons = document.querySelectorAll('.floor-toggle .btn');
+        if (!floor1Nav || !floor2Nav || !floor3Nav) return;
+        if (floor === 1) {
+            floor1Nav.style.display = 'block';
+            floor2Nav.style.display = 'none';
+            floor3Nav.style.display = 'none';
+            if (floorButtons.length >= 3) {
+                floorButtons[0].style.background = 'white';
+                floorButtons[0].style.color = '#FF5D07';
+                floorButtons[1].style.background = 'transparent';
+                floorButtons[1].style.color = 'white';
+                floorButtons[2].style.background = 'transparent';
+                floorButtons[2].style.color = 'white';
+            }
+            if (viewer) viewer.loadScene('scene_1');
+            setTimeout(() => updateCarouselButtons('floor1-nav'), 200);
+        } else if (floor === 2) {
+            floor1Nav.style.display = 'none';
+            floor2Nav.style.display = 'block';
+            floor3Nav.style.display = 'none';
+            if (floorButtons.length >= 3) {
+                floorButtons[0].style.background = 'transparent';
+                floorButtons[0].style.color = 'white';
+                floorButtons[1].style.background = 'white';
+                floorButtons[1].style.color = '#FF5D07';
+                floorButtons[2].style.background = 'transparent';
+                floorButtons[2].style.color = 'white';
+            }
+            if (viewer) viewer.loadScene('scene_10');
+            setTimeout(() => updateCarouselButtons('floor2-nav'), 200);
+        } else {
+            floor1Nav.style.display = 'none';
+            floor2Nav.style.display = 'none';
+            floor3Nav.style.display = 'block';
+            if (floorButtons.length >= 3) {
+                floorButtons[0].style.background = 'transparent';
+                floorButtons[0].style.color = 'white';
+                floorButtons[1].style.background = 'transparent';
+                floorButtons[1].style.color = 'white';
+                floorButtons[2].style.background = 'white';
+                floorButtons[2].style.color = '#FF5D07';
+            }
+            if (viewer) viewer.loadScene('scene_20');
+            setTimeout(() => updateCarouselButtons('floor3-nav'), 200);
+        }
+    }
 
-            if (!floor1Nav || !floor2Nav || !floor3Nav) return;
+    // Set active nav untuk tombol ruangan
+    function setActiveNav(button, sceneId) {
+        if (!button) return;
+        let floor = 1;
+        if (sceneId >= 10 && sceneId <= 19) floor = 2;
+        else if (sceneId >= 20) floor = 3;
+        const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
+        const allNavButtons = document.querySelectorAll(`#${currentFloorNav} .btn`);
+        allNavButtons.forEach(btn => {
+            btn.classList.remove('active-nav');
+            btn.style.background = 'transparent';
+            btn.style.color = 'white';
+        });
+        button.classList.add('active-nav');
+        button.style.background = 'white';
+        button.style.color = '#FF5D07';
+        viewer.loadScene('scene_' + sceneId);
+    }
 
+    // Event ketika scene berubah
+    viewer.on('scenechange', function (sceneId) {
+        const id = sceneId.replace('scene_', '');
+        let floor = 1;
+        if (id >= 10 && id <= 19) floor = 2;
+        else if (id >= 20) floor = 3;
+
+        const floor1Nav = document.getElementById('floor1-nav');
+        const floor2Nav = document.getElementById('floor2-nav');
+        const floor3Nav = document.getElementById('floor3-nav');
+        const floorButtons = document.querySelectorAll('.floor-toggle .btn');
+        if (floor1Nav && floor2Nav && floor3Nav) {
             if (floor === 1) {
                 floor1Nav.style.display = 'block';
                 floor2Nav.style.display = 'none';
@@ -469,8 +511,6 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                     floorButtons[2].style.background = 'transparent';
                     floorButtons[2].style.color = 'white';
                 }
-                if (viewer) viewer.loadScene('scene_1');
-                setTimeout(() => updateCarouselButtons('floor1-nav'), 200);
             } else if (floor === 2) {
                 floor1Nav.style.display = 'none';
                 floor2Nav.style.display = 'block';
@@ -483,8 +523,6 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                     floorButtons[2].style.background = 'transparent';
                     floorButtons[2].style.color = 'white';
                 }
-                if (viewer) viewer.loadScene('scene_10');
-                setTimeout(() => updateCarouselButtons('floor2-nav'), 200);
             } else {
                 floor1Nav.style.display = 'none';
                 floor2Nav.style.display = 'none';
@@ -497,122 +535,56 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                     floorButtons[2].style.background = 'white';
                     floorButtons[2].style.color = '#FF5D07';
                 }
-                if (viewer) viewer.loadScene('scene_20');
-                setTimeout(() => updateCarouselButtons('floor3-nav'), 200);
             }
         }
 
-        // Fungsi update tombol
-        function updateCarouselButtons(containerId) {
-            const navElement = document.getElementById(containerId);
-            if (!navElement || navElement.style.display === 'none') return;
-
-            const container = navElement.querySelector('.scroll-wrapper');
-            const leftBtn = navElement.querySelector('.scroll-left');
-            const rightBtn = navElement.querySelector('.scroll-right');
-
-            if (!container || !leftBtn || !rightBtn) return;
-
-            const canScrollLeft = container.scrollLeft > 5;
-            const canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth - 5);
-
-            leftBtn.style.display = canScrollLeft ? 'flex' : 'none';
-            rightBtn.style.display = canScrollRight ? 'flex' : 'none';
-        }
-
-
-        // Init carousel
-        function initCarousel(containerId) {
-            const navElement = document.getElementById(containerId);
-            if (!navElement) return;
-
-            const container = navElement.querySelector('.scroll-wrapper');
-            let leftBtn = navElement.querySelector('.scroll-left');
-            let rightBtn = navElement.querySelector('.scroll-right');
-
-            if (!container || !leftBtn || !rightBtn) return;
-
-            // Hapus event lama (biar tidak double)
-            const newLeftBtn = leftBtn.cloneNode(true);
-            const newRightBtn = rightBtn.cloneNode(true);
-            leftBtn.parentNode.replaceChild(newLeftBtn, leftBtn);
-            rightBtn.parentNode.replaceChild(newRightBtn, rightBtn);
-
-            leftBtn = navElement.querySelector('.scroll-left');
-            rightBtn = navElement.querySelector('.scroll-right');
-
-            // Klik kiri
-            leftBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                container.scrollBy({
-                    left: -container.clientWidth,
-                    behavior: 'smooth'
-                });
-
-                setTimeout(() => updateCarouselButtons(containerId), 100);
-            });
-
-            // Klik kanan
-            rightBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                container.scrollBy({
-                    left: container.clientWidth,
-                    behavior: 'smooth'
-                });
-
-                setTimeout(() => updateCarouselButtons(containerId), 100);
-            });
-
-            // Saat di-scroll manual
-            container.addEventListener('scroll', () => {
-                requestAnimationFrame(() => updateCarouselButtons(containerId));
-            });
-
-            // Saat resize
-            window.addEventListener('resize', () => {
-                updateCarouselButtons(containerId);
-            });
-
-            // update saat pertama load
-            setTimeout(() => updateCarouselButtons(containerId), 200);
-        }
-
-        // Fungsi untuk set active nav
-        function setActiveNav(button, sceneId) {
-            if (!button) return;
-
-            let floor = 1;
-            if (sceneId >= 10 && sceneId <= 19) floor = 2;
-            else if (sceneId >= 20) floor = 3;
-
-            const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
-
-            const allNavButtons = document.querySelectorAll(`#${currentFloorNav} .btn`);
-            allNavButtons.forEach(btn => {
+        const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
+        const buttons = document.querySelectorAll(`#${currentFloorNav} .btn`);
+        buttons.forEach((btn, index) => {
+            let expectedId = index + 1;
+            if (floor === 2) expectedId = index + 10;
+            if (floor === 3) expectedId = index + 20;
+            if (expectedId == id) {
+                btn.classList.add('active-nav');
+                btn.style.background = 'white';
+                btn.style.color = '#FF5D07';
+            } else {
                 btn.classList.remove('active-nav');
                 btn.style.background = 'transparent';
                 btn.style.color = 'white';
-            });
+            }
+        });
 
-            button.classList.add('active-nav');
-            button.style.background = 'white';
-            button.style.color = '#FF5D07';
-
-            viewer.loadScene('scene_' + sceneId);
+        // Update info panel
+        const namaEl = document.getElementById('ruangan-nama');
+        const descEl = document.getElementById('ruangan-deskripsi');
+        if (namaEl && descEl && lokasiData) {
+            namaEl.style.opacity = '0';
+            descEl.style.opacity = '0';
+            setTimeout(() => {
+                namaEl.innerText = lokasiData[id]?.nama_lokasi || 'Ruangan';
+                descEl.innerText = lokasiData[id]?.deskripsi || 'Deskripsi tidak tersedia';
+                namaEl.style.opacity = '1';
+                descEl.style.opacity = '1';
+            }, 200);
         }
+    });
 
-        // Event scenechange
-        viewer.on('scenechange', function (sceneId) {
-            const id = sceneId.replace('scene_', '');
+    window.addEventListener('resize', function () {
+        const container = document.getElementById('panorama-container');
+        if (container) container.style.height = window.innerHeight + 'px';
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(() => {
+            const defaultId = defaultScene;
             let floor = 1;
-            if (id >= 10 && id <= 19) floor = 2;
-            else if (id >= 20) floor = 3;
-
+            if (defaultId >= 10 && defaultId <= 19) floor = 2;
+            else if (defaultId >= 20) floor = 3;
             const floor1Nav = document.getElementById('floor1-nav');
             const floor2Nav = document.getElementById('floor2-nav');
             const floor3Nav = document.getElementById('floor3-nav');
             const floorButtons = document.querySelectorAll('.floor-toggle .btn');
-
             if (floor1Nav && floor2Nav && floor3Nav) {
                 if (floor === 1) {
                     floor1Nav.style.display = 'block';
@@ -652,122 +624,23 @@ if ($default_scene >= 10 && $default_scene <= 19) {
                     }
                 }
             }
-
             const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
             const buttons = document.querySelectorAll(`#${currentFloorNav} .btn`);
-
             buttons.forEach((btn, index) => {
                 let expectedId = index + 1;
                 if (floor === 2) expectedId = index + 10;
                 if (floor === 3) expectedId = index + 20;
-
-                if (expectedId == id) {
+                if (expectedId == defaultId) {
                     btn.classList.add('active-nav');
                     btn.style.background = 'white';
                     btn.style.color = '#FF5D07';
-                } else {
-                    btn.classList.remove('active-nav');
-                    btn.style.background = 'transparent';
-                    btn.style.color = 'white';
                 }
             });
-
-            // Update informasi ruangan
-            const namaEl = document.getElementById('ruangan-nama');
-            const descEl = document.getElementById('ruangan-deskripsi');
-
-            if (namaEl && descEl && lokasiData) {
-                namaEl.style.opacity = '0';
-                descEl.style.opacity = '0';
-
-                setTimeout(() => {
-                    namaEl.innerText = lokasiData[id]?.nama_lokasi || 'Ruangan';
-                    descEl.innerText = lokasiData[id]?.deskripsi || 'Deskripsi tidak tersedia';
-                    namaEl.style.opacity = '1';
-                    descEl.style.opacity = '1';
-                }, 200);
-            }
-        });
-
-        window.addEventListener('resize', function () {
-            const container = document.getElementById('panorama-container');
-            if (container) container.style.height = window.innerHeight + 'px';
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Set display lantai dan active button
-            setTimeout(() => {
-                const defaultId = defaultScene;
-                let floor = 1;
-                if (defaultId >= 10 && defaultId <= 19) floor = 2;
-                else if (defaultId >= 20) floor = 3;
-
-                const floor1Nav = document.getElementById('floor1-nav');
-                const floor2Nav = document.getElementById('floor2-nav');
-                const floor3Nav = document.getElementById('floor3-nav');
-                const floorButtons = document.querySelectorAll('.floor-toggle .btn');
-
-                if (floor1Nav && floor2Nav && floor3Nav) {
-                    if (floor === 1) {
-                        floor1Nav.style.display = 'block';
-                        floor2Nav.style.display = 'none';
-                        floor3Nav.style.display = 'none';
-                        if (floorButtons.length >= 3) {
-                            floorButtons[0].style.background = 'white';
-                            floorButtons[0].style.color = '#FF5D07';
-                            floorButtons[1].style.background = 'transparent';
-                            floorButtons[1].style.color = 'white';
-                            floorButtons[2].style.background = 'transparent';
-                            floorButtons[2].style.color = 'white';
-                        }
-                    } else if (floor === 2) {
-                        floor1Nav.style.display = 'none';
-                        floor2Nav.style.display = 'block';
-                        floor3Nav.style.display = 'none';
-                        if (floorButtons.length >= 3) {
-                            floorButtons[0].style.background = 'transparent';
-                            floorButtons[0].style.color = 'white';
-                            floorButtons[1].style.background = 'white';
-                            floorButtons[1].style.color = '#FF5D07';
-                            floorButtons[2].style.background = 'transparent';
-                            floorButtons[2].style.color = 'white';
-                        }
-                    } else {
-                        floor1Nav.style.display = 'none';
-                        floor2Nav.style.display = 'none';
-                        floor3Nav.style.display = 'block';
-                        if (floorButtons.length >= 3) {
-                            floorButtons[0].style.background = 'transparent';
-                            floorButtons[0].style.color = 'white';
-                            floorButtons[1].style.background = 'transparent';
-                            floorButtons[1].style.color = 'white';
-                            floorButtons[2].style.background = 'white';
-                            floorButtons[2].style.color = '#FF5D07';
-                        }
-                    }
-                }
-
-                // Set active button
-                const currentFloorNav = floor === 1 ? 'floor1-nav' : (floor === 2 ? 'floor2-nav' : 'floor3-nav');
-                const buttons = document.querySelectorAll(`#${currentFloorNav} .btn`);
-
-                buttons.forEach((btn, index) => {
-                    let expectedId = index + 1;
-                    if (floor === 2) expectedId = index + 10;
-                    if (floor === 3) expectedId = index + 20;
-                    if (expectedId == defaultId) {
-                        btn.classList.add('active-nav');
-                        btn.style.background = 'white';
-                        btn.style.color = '#FF5D07';
-                    }
-                });
-            }, 100);
-
-            // Inisialisasi carousel setelah display lantai di-set
-            setTimeout(() => {
-                initCarousel('floor1-nav');
-                initCarousel('floor2-nav');
-                initCarousel('floor3-nav');
-            }, 300);
-        });
-    </script>
+        }, 100);
+        setTimeout(() => {
+            initCarousel('floor1-nav');
+            initCarousel('floor2-nav');
+            initCarousel('floor3-nav');
+        }, 300);
+    });
+</script>
