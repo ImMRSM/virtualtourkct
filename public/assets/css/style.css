@@ -20,7 +20,7 @@ body.virtualtour-page {
     padding-top: 56px; 
 }
  /* tinggi navbar fixed-top */
- 
+
 /* Sticky Footer */
 main {
     flex: 1 0 auto;
@@ -663,5 +663,96 @@ footer a:hover {
     }
     #floor3-nav .btn i {
         display: none !important;
+    }
+}
+/* ==========================================
+   PERBAIKAN KHUSUS HP UNTUK VIRTUAL TOUR
+   ========================================== */
+
+/* 1. Tombol lantai (1,2,3) - pastikan muncul dan tidak terpotong */
+@media (max-width: 768px) {
+    .floor-toggle {
+        position: fixed !important;
+        right: 5px !important;
+        top: auto !important;
+        bottom: 80px !important;  /* pindahkan ke bawah, di atas info panel */
+        z-index: 9999 !important;
+        background: rgba(0,0,0,0.6) !important;
+        border-radius: 40px !important;
+        padding: 5px !important;
+    }
+    .floor-toggle .btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1rem !important;
+        margin: 2px 0 !important;
+    }
+}
+
+/* 2. Tombol zoom Pannellum (bawaan) - atur posisi agar tidak terpotong */
+@media (max-width: 768px) {
+    .pnlm-zoom-controls {
+        position: fixed !important;
+        left: 10px !important;
+        bottom: 80px !important;  /* pindahkan ke kiri bawah */
+        top: auto !important;
+        z-index: 9999 !important;
+    }
+    .pnlm-zoom-in, .pnlm-zoom-out {
+        width: 40px !important;
+        height: 40px !important;
+        background-size: 26px !important;
+    }
+}
+
+/* 3. Tombol fullscreen (jika ada) - atur ulang posisi */
+@media (max-width: 768px) {
+    .pnlm-fullscreen-toggle-button {
+        position: fixed !important;
+        left: 60px !important;
+        bottom: 80px !important;
+        top: auto !important;
+        width: 40px !important;
+        height: 40px !important;
+        background-size: 26px !important;
+        z-index: 9999 !important;
+    }
+}
+
+/* 4. Quick-nav (navigasi ruangan) - pastikan scroll horizontal berfungsi dan tidak terpotong */
+@media (max-width: 768px) {
+    .quick-nav {
+        top: 60px !important;  /* turunkan sedikit agar tidak tertutup navbar */
+        width: 90% !important;
+        left: 5% !important;
+        transform: none !important;
+    }
+    .quick-nav .scroll-wrapper {
+        max-width: 100% !important;
+        padding: 0 30px !important;
+    }
+    .quick-nav .btn {
+        min-width: 70px !important;
+        font-size: 0.7rem !important;
+        padding: 5px 8px !important;
+        white-space: nowrap;
+    }
+    .scroll-btn {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 18px !important;
+    }
+}
+
+/* 5. Info panel (deskripsi ruangan) - agar tidak menutupi tombol zoom/lantai */
+@media (max-width: 768px) {
+    .info-panel {
+        bottom: 10px !important;
+        left: 10px !important;
+        max-width: 60% !important;
+        z-index: 9990 !important;
+    }
+    .info-panel .card-body {
+        padding: 0.5rem !important;
     }
 }
