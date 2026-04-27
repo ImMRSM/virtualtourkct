@@ -21,7 +21,7 @@
 
 <body class="<?= basename($_SERVER['PHP_SELF']) == 'virtualtour.php' ? 'virtualtour-page' : '' ?>">
     <!-- Header Modern & Simple -->
- <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background: #FF5D07;">
+ <nav class="navbar navbar-expand-lg navbar-dark shadow-sm fixed-top" style="background: #FF5D07; z-index: 9999;">
         <div class="container">
             <!-- Logo/Brand dengan icon - text putih -->
             <a class="navbar-brand fw-semibold" href="index.php">

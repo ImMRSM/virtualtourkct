@@ -17,9 +17,10 @@ body {
 
 /* Khusus halaman virtualtour: batalkan padding karena sudah punya margin-top sendiri di .content-wrapper */
 body.virtualtour-page {
-    padding-top: 0;
+    padding-top: 56px; 
 }
-
+ /* tinggi navbar fixed-top */
+ 
 /* Sticky Footer */
 main {
     flex: 1 0 auto;

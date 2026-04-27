@@ -3,7 +3,7 @@
 /* Reset dan layout dasar */
 html,
 body {
-    overflow: hidden;
+    /* overflow: hidden; */
     height: 100%;
     margin: 0;
     padding: 0;
@@ -26,8 +26,8 @@ main {
 /* Content wrapper */
 .content-wrapper {
     position: relative;
-    height: calc(100vh - 56px);
-    margin-top: 56px;
+    height: 100vh;
+    margin-top: 0;
     overflow: hidden;
 }
 
@@ -223,11 +223,11 @@ main {
 }
 
 @media (max-width: 768px) {
-    .content-wrapper {
+    /* .content-wrapper {
         margin-top: 50px;
         height: calc(100vh - 50px);
-    }
-    
+    } */
+
     .info-panel {
         max-width: 240px;
         bottom: 10px;

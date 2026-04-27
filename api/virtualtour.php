@@ -91,20 +91,21 @@ if ($default_scene >= 10 && $default_scene <= 19) {
         margin: 0 !important;
         padding: 0 !important;
         background-color: #000;
-        overflow: hidden;
+        /* overflow: hidden; */
         height: 100%;
     }
 
-    .content-wrapper {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100%;
-        height: 100vh;
-        margin-top: 56px;
-        height: calc(100vh - 56px);
-        overflow: hidden;
-    }
-
+   .content-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    height: 100vh;
+    margin-top: 0;   /* ← dari 56px menjadi 0 */
+    height: 100vh;   /* ← dari calc(100vh - 56px) menjadi 100vh */
+    overflow: hidden; /* biarkan saja, karena wrapper VR yang di-hidden, bukan body */
+    position: relative;
+    z-index: 1;
+}
     #panorama-container {
         width: 100% !important;
         height: 100% !important;
@@ -215,7 +216,7 @@ if ($default_scene >= 10 && $default_scene <= 19) {
 }
 </style>
 
-<div class="content-wrapper" style="margin-top: 56px;">
+<div class="content-wrapper">
     <!-- Panorama Container - Full screen -->
     <div id="panorama-container"></div>
 
